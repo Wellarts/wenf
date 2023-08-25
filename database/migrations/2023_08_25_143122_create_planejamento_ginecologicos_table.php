@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('planejamento_reprodutivos', function (Blueprint $table) {
+        Schema::create('planejamento_ginecologicos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('paciente_id');
             $table->date('data_atendimento');
@@ -52,10 +52,14 @@ return new class extends Migration
             $table->string('cirurgias_transfusao');
             $table->string('cancer');
             $table->string('outros');
-            $table->string('mamografia');
-            $table->string('preventivo');
-            $table->date('data_mamografia');
-            $table->date('data_preventivo');
+            $table->string('insp_estatica');
+            $table->string('insp_dinamica');
+            $table->string('palpacao');
+            $table->string('desgarga_papilar');
+            $table->string('vulva');
+            $table->string('vagina');
+            $table->string('colo');
+            $table->string('muco');
             $table->longText('diagnostico');
             $table->longText('planejamento');
             $table->longText('avaliacao');
@@ -68,6 +72,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('planejamento_reprodutivos');
+        Schema::dropIfExists('planejamento_ginecologicos');
     }
 };

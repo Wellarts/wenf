@@ -2,11 +2,10 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\PlanejamentoReprodutivoResource\Pages;
-use App\Filament\Resources\PlanejamentoReprodutivoResource\RelationManagers;
+use App\Filament\Resources\PlanejamentoGinecologicoResource\Pages;
+use App\Filament\Resources\PlanejamentoGinecologicoResource\RelationManagers;
 use App\Models\Estado;
-use App\Models\Paciente;
-use App\Models\PlanejamentoReprodutivo;
+use App\Models\PlanejamentoGinecologico;
 use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Components\Fieldset;
@@ -19,16 +18,15 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class PlanejamentoReprodutivoResource extends Resource
+class PlanejamentoGinecologicoResource extends Resource
 {
-    protected static ?string $model = PlanejamentoReprodutivo::class;
+    protected static ?string $model = PlanejamentoGinecologico::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $navigationGroup = 'Atendimentos';
 
-    protected static ?string $navigationLabel = 'Planejamentos Reprodutivos';
-
+    protected static ?string $navigationLabel = 'Planejamentos Ginecológicos';
 
     public static function form(Form $form): Form
     {
@@ -248,18 +246,27 @@ class PlanejamentoReprodutivoResource extends Resource
                             ]),
 
                     ]),
-                Fieldset::make('Histório de Exames Ginecológicos')
+                Fieldset::make('Exames das Mamas')
                     ->schema([
-                        Forms\Components\Checkbox::make('mamografia')
-                            ->live(),
-                        Forms\Components\DatePicker::make('data_mamografia')
-                            ->hidden(fn (Get $get): bool => !$get('mamografia'))
-                            ->label('Data da Mamografia'),
-                        Forms\Components\Checkbox::make('preventivo')
-                            ->live(),
-                        Forms\Components\DatePicker::make('data_preventivo')
-                            ->hidden(fn (Get $get): bool => !$get('preventivo'))
-                            ->label('Data do Preventivo'),
+                        Forms\Components\TextInput::make('insp_estatica')
+                            ->label('Inspeção Estática'),
+                        Forms\Components\TextInput::make('insp_dinamica')
+                            ->label('Inspeção Dinâmica'),
+                        Forms\Components\TextInput::make('palpacao')
+                            ->label('Palpação'),
+                        Forms\Components\TextInput::make('desgarga_papilar')
+                            ->label('Desgarga Papilar'),
+                    ]),
+                Fieldset::make('Avaliação de Especular')
+                    ->schema([
+                        Forms\Components\TextInput::make('vulva')
+                            ->label('Vulva'),
+                        Forms\Components\TextInput::make('vagina')
+                            ->label('Vagina'),
+                        Forms\Components\TextInput::make('colo')
+                            ->label('Colo'),
+                        Forms\Components\TextInput::make('muco')
+                            ->label('Muco'),
                     ]),
 
                 Fieldset::make('Diagnósticos e Avaliações')
@@ -271,9 +278,9 @@ class PlanejamentoReprodutivoResource extends Resource
                             ->label('Planejamento/Implementação')
                             ->columnSpanFull(),
                         Forms\Components\Textarea::make('avaliacao')
-                             ->label('Avaliação/Retorno')
-                             ->columnSpanFull(),
-                        ])
+                            ->label('Avaliação/Retorno')
+                            ->columnSpanFull(),
+                    ])
             ]);
     }
 
@@ -287,10 +294,11 @@ class PlanejamentoReprodutivoResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('data_atendimento')
                     ->label('Data do Atendimento')
-                    ->dateTime()
+                    ->alignCenter()
+                    ->date()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('queixa_principal')
-                   ->label('Queixa Principal'),
+                    ->label('Queixa Principal'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -312,8 +320,7 @@ class PlanejamentoReprodutivoResource extends Resource
                 ]),
             ])
             ->emptyStateActions([
-                Tables\Actions\CreateAction::make()
-                    ->label('Novo'),
+                Tables\Actions\CreateAction::make(),
             ]);
     }
 
@@ -327,9 +334,9 @@ class PlanejamentoReprodutivoResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListPlanejamentoReprodutivos::route('/'),
-            'create' => Pages\CreatePlanejamentoReprodutivo::route('/create'),
-            'edit' => Pages\EditPlanejamentoReprodutivo::route('/{record}/edit'),
+            'index' => Pages\ListPlanejamentoGinecologicos::route('/'),
+            'create' => Pages\CreatePlanejamentoGinecologico::route('/create'),
+            'edit' => Pages\EditPlanejamentoGinecologico::route('/{record}/edit'),
         ];
     }
 }

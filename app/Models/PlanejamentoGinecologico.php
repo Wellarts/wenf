@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PlanejamentoReprodutivo extends Model
+class PlanejamentoGinecologico extends Model
 {
     use HasFactory;
 
@@ -50,16 +50,21 @@ class PlanejamentoReprodutivo extends Model
         'cirurgias_transfusao',
         'cancer',
         'outros',
-        'mamografia',
-        'preventivo',
-        'data_mamografia',
-        'data_preventivo',
+        'insp_estatica',
+        'insp_dinamica',
+        'palpacao',
+        'desgarga_papilar',
+        'vulva',
+        'vagina',
+        'colo',
+        'muco',
         'diagnostico',
         'planejamento',
         'avaliacao',
     ];
 
-    public function Paciente() {
+    public function Paciente()
+    {
         return $this->belongsTo(Paciente::class);
     }
 }
