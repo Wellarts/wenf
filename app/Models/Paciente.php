@@ -28,4 +28,8 @@ class Paciente extends Model
         return $this->belongsTo(Cidade::class);
     }
 
+    public function PlanejamentoReprodutivo() {
+        return $this->hasMany(PlanejamentoReprodutivo::class);
+    }
+
 }
