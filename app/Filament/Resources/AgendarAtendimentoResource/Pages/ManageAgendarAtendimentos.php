@@ -10,10 +10,16 @@ class ManageAgendarAtendimentos extends ManageRecords
 {
     protected static string $resource = AgendarAtendimentoResource::class;
 
+    protected static ?string $title = 'Atendimentos Agendados';
+
+
+
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->label('Novo')
+                ->modalHeading('Criar Agendamento'),
         ];
     }
 }

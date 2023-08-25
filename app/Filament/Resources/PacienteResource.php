@@ -20,6 +20,10 @@ class PacienteResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?string $navigationGroup = 'Cadastros';
+
+    protected static ?string $navigationLabel = 'Pacientes';
+
     public static function form(Form $form): Form
     {
         return $form

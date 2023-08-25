@@ -19,6 +19,10 @@ class AgendarAtendimentoResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?string $navigationGroup = 'Atendimentos';
+
+    protected static ?string $navigationLabel = 'Agendamentos';
+
     public static function form(Form $form): Form
     {
         return $form
@@ -74,7 +78,8 @@ class AgendarAtendimentoResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->modalHeading('Editar Agendamento'),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([

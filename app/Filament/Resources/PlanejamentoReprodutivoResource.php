@@ -24,6 +24,11 @@ class PlanejamentoReprodutivoResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?string $navigationGroup = 'Atendimentos';
+
+    protected static ?string $navigationLabel = 'Planejamentos Reprodutivos';
+
+
     public static function form(Form $form): Form
     {
         return $form
@@ -386,7 +391,8 @@ class PlanejamentoReprodutivoResource extends Resource
                 ]),
             ])
             ->emptyStateActions([
-                Tables\Actions\CreateAction::make(),
+                Tables\Actions\CreateAction::make()
+                    ->label('Novo'),
             ]);
     }
 

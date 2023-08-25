@@ -13,7 +13,9 @@ class ManagePacientes extends ManageRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->label('Novo')
+                ->modalHeading('Criar Paciente'),
         ];
     }
 }

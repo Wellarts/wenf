@@ -10,6 +10,8 @@ class EditPlanejamentoReprodutivo extends EditRecord
 {
     protected static string $resource = PlanejamentoReprodutivoResource::class;
 
+    protected static ?string $title = 'Editar Planejamento Reprodutivo';
+
     protected function getHeaderActions(): array
     {
         return [
