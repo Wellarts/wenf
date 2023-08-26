@@ -35,8 +35,12 @@ class ReceituarioResource extends Resource
                     ->default(Carbon::now())
                     ->label('Data do Atendimento')
                     ->required(),
-                Forms\Components\RichEditor::make('descricao')
+                Forms\Components\Textarea::make('descricao')
+                    ->label('Descrição')
+                    ->autosize()
                     ->required()
+                    ->rows(8)
+                    ->cols(20)
                     ->columnSpanFull(),
             ]);
     }
@@ -67,6 +71,9 @@ class ReceituarioResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
+                Tables\Actions\Action::make('Imprimir')
+                ->url(fn (Receituario $record): string => route('imprimirReceituario', $record))
+                ->openUrlInNewTab(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
