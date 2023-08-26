@@ -10,7 +10,7 @@ class ManageAgendarAtendimentos extends ManageRecords
 {
     protected static string $resource = AgendarAtendimentoResource::class;
 
-    protected static ?string $title = 'Atendimentos Agendados';
+    protected static ?string $title = 'Agendamentos';
 
 
 
