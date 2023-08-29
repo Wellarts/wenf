@@ -457,7 +457,7 @@ class PlanejamentoGinecologicoResource extends Resource
                             ->multiple()
                             ->getSearchResultsUsing(fn (string $search): array => DiagnosticoIntervencao::where('descricao', 'like', "%{$search}%")->limit(50)->pluck('descricao', 'id')->toArray())
                             ->getOptionLabelsUsing(fn (array $values): array => DiagnosticoIntervencao::whereIn('id', $values)->pluck('descricao', 'id')->toArray())
-                            ->label('Diagnóstico de Enfermagem'),
+                            ->label('Diagnósticos de Enfermagem'),
                            /* ->createOptionForm([
                                 Grid::make()
                                     ->schema([
