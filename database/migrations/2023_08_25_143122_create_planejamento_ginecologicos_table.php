@@ -87,12 +87,12 @@ return new class extends Migration
             $table->string('colo');
             $table->string('muco');
             $table->string('anexo_2');
-            $table->string('diagnostico');
-            $table->string('diagnostico_cod');
-            $table->string('planejamento');
-            $table->string('planejamento_cod');
+            $table->string('diagnostico_intervencao_id');
+            $table->string('planejamento_implementacao_id');
             $table->longText('planejamento_desc');
             $table->longText('avaliacao');
+            $table->string('anexo_exame');
+            $table->string('anexo_outros');
             $table->timestamps();
         });
     }

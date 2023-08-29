@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\DiagnosticoIntervencaoResource\Pages;
-use App\Filament\Resources\DiagnosticoIntervencaoResource\RelationManagers;
-use App\Models\DiagnosticoIntervencao;
+use App\Filament\Resources\PlanejamentoImplementacaoResource\Pages;
+use App\Filament\Resources\PlanejamentoImplementacaoResource\RelationManagers;
+use App\Models\PlanejamentoImplementacao;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,15 +13,15 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class DiagnosticoIntervencaoResource extends Resource
+class PlanejamentoImplementacaoResource extends Resource
 {
-    protected static ?string $model = DiagnosticoIntervencao::class;
+    protected static ?string $model = PlanejamentoImplementacao::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $navigationGroup = 'Cadastros';
 
-    protected static ?string $navigationLabel = 'Diagnósticos e Intervenções';
+    protected static ?string $navigationLabel = 'Planejamentos e Implementações';
 
     public static function form(Form $form): Form
     {
@@ -46,26 +46,26 @@ class DiagnosticoIntervencaoResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->columns([
-                Tables\Columns\TextColumn::make('descricao')
-                    ->label('Código - Descrição')
-                    ->searchable(),
-                Tables\Columns\SelectColumn::make('tipo')
-                     ->options([
-                        '1' => 'Ginecológico',
-                        '2' => 'Reprodutivo',
-                        '3' => 'Perinatal',
-                        '4' => 'Amamentação'
-                    ])
-                    ->disabled(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+        ->columns([
+            Tables\Columns\TextColumn::make('descricao')
+                ->label('Código - Descrição')
+                ->searchable(),
+            Tables\Columns\SelectColumn::make('tipo')
+                 ->options([
+                    '1' => 'Ginecológico',
+                    '2' => 'Reprodutivo',
+                    '3' => 'Perinatal',
+                    '4' => 'Amamentação'
+                ])
+                ->disabled(),
+            Tables\Columns\TextColumn::make('created_at')
+                ->dateTime()
+                ->sortable()
+                ->toggleable(isToggledHiddenByDefault: true),
+            Tables\Columns\TextColumn::make('updated_at')
+                ->dateTime()
+                ->sortable()
+                ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
@@ -87,7 +87,7 @@ class DiagnosticoIntervencaoResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageDiagnosticoIntervencaos::route('/'),
+            'index' => Pages\ManagePlanejamentoImplementacaos::route('/'),
         ];
     }
 }

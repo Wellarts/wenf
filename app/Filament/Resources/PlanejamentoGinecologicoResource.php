@@ -7,6 +7,7 @@ use App\Filament\Resources\PlanejamentoGinecologicoResource\RelationManagers;
 use App\Models\DiagnosticoIntervencao;
 use App\Models\Estado;
 use App\Models\PlanejamentoGinecologico;
+use App\Models\PlanejamentoImplementacao;
 use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Components\Fieldset;
@@ -21,6 +22,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 class PlanejamentoGinecologicoResource extends Resource
 {
@@ -451,22 +453,16 @@ class PlanejamentoGinecologicoResource extends Resource
 
                 Fieldset::make('Diagnósticos e Avaliações')
                     ->schema([
-                        Forms\Components\Select::make('diagnostico')
-                            ->relationship(name: 'diagnosticoIntervencao', titleAttribute: 'descricao')
-                            ->afterStateUpdated(function(Get $get, Set $set, $state){
-                                $set('diagnostico_cod', DiagnosticoIntervencao::find($state)->codigo);
-                            })
-                            ->live()
-                            ->label('Diagnóstico de Enfermagem')
-                            ->createOptionForm([
+                        Forms\Components\Select::make('diagnostico_intervencao_id')
+                            ->multiple()
+                            ->getSearchResultsUsing(fn (string $search): array => DiagnosticoIntervencao::where('descricao', 'like', "%{$search}%")->limit(50)->pluck('descricao', 'id')->toArray())
+                            ->getOptionLabelsUsing(fn (array $values): array => DiagnosticoIntervencao::whereIn('id', $values)->pluck('descricao', 'id')->toArray())
+                            ->label('Diagnóstico de Enfermagem'),
+                           /* ->createOptionForm([
                                 Grid::make()
                                     ->schema([
-                                        Forms\Components\TextInput::make('codigo')
-                                        ->label('Código')
-                                        ->required()
-                                        ->maxLength(255),
                                     Forms\Components\TextInput::make('descricao')
-                                        ->label('Descrição')
+                                        ->label('Código - Descrição')
                                         ->required()
                                         ->maxLength(255),
                                     Forms\Components\Radio::make('tipo')
@@ -479,48 +475,44 @@ class PlanejamentoGinecologicoResource extends Resource
                                         ->required()
 
                                     ])
-                                ]),
-                        Forms\Components\TextInput::make('diagnostico_cod')
-                            ->disabled()
-                            ->label('Código'),
-                        Forms\Components\Select::make('planejamento')
-                            ->relationship(name: 'diagnosticoIntervencao', titleAttribute: 'descricao')
-                            ->afterStateUpdated(function(Get $get, Set $set, $state){
-                                $set('planejamento_cod', DiagnosticoIntervencao::find($state)->codigo);
-                            })
-                            ->live()
-                            ->label('Planejamento/Implementação')
-                            ->createOptionForm([
-                                Grid::make()
-                                    ->schema([
-                                        Forms\Components\TextInput::make('codigo')
-                                        ->label('Código')
-                                        ->required()
-                                        ->maxLength(255),
-                                    Forms\Components\TextInput::make('descricao')
-                                        ->label('Descrição')
-                                        ->required()
-                                        ->maxLength(255),
-                                    Forms\Components\Radio::make('tipo')
-                                        ->options([
-                                            '1' => 'Ginecológico',
-                                            '2' => 'Reprodutivo',
-                                            '3' => 'Perinatal',
-                                            '4' => 'Amamentação'
-                                        ])
-                                        ->required()
+                                ]), */
+                            Forms\Components\Select::make('planejamento_implementacao_id')
+                                ->multiple()
+                                ->getSearchResultsUsing(fn (string $search): array => PlanejamentoImplementacao::where('descricao', 'like', "%{$search}%")->limit(50)->pluck('descricao', 'id')->toArray())
+                                ->getOptionLabelsUsing(fn (array $values): array => PlanejamentoImplementacao::whereIn('id', $values)->pluck('descricao', 'id')->toArray())
+                                ->label('Planejamentos/Implementações'),
+                              /*  ->createOptionForm([
+                                    Grid::make()
+                                        ->schema([
+                                        Forms\Components\TextInput::make('descricao')
+                                            ->label('Código - Descrição')
+                                            ->required()
+                                            ->maxLength(255),
+                                        Forms\Components\Radio::make('tipo')
+                                            ->options([
+                                                '1' => 'Ginecológico',
+                                                '2' => 'Reprodutivo',
+                                                '3' => 'Perinatal',
+                                                '4' => 'Amamentação'
+                                            ])
+                                            ->required()
 
-                                    ])
-                                ]),
-                        Forms\Components\TextInput::make('planejamento_cod')
-                            ->disabled()
-                            ->label('Código'),
+                                        ])
+                                ]), */
                         Forms\Components\Textarea::make('planejamento_desc')
                             ->label('Descrição do planejamento')
                             ->columnSpanFull(),
                         Forms\Components\Textarea::make('avaliacao')
                             ->label('Avaliação/Retorno')
                             ->columnSpanFull(),
+                        FileUpload::make('anexo_exame')
+                            ->multiple()
+                            ->label('Exames')
+                            ->downloadable(),
+                        FileUpload::make('anexo_outros')
+                            ->multiple()
+                            ->label('Outros Anexos')
+                            ->downloadable()
                     ])
             ]);
     }

@@ -85,12 +85,20 @@ class PlanejamentoGinecologico extends Model
         'colo',
         'muco',
         'anexo_2',
-        'diagnostico',
-        'diagnostico_cod',
-        'planejamento',
-        'planejamento_cod',
+        'diagnostico_intervencao_id',
+        'planejamento_implementacao_id',
         'planejamento_desc',
         'avaliacao',
+        'anexo_exame',
+        'anexo_outros',
+    ];
+
+      protected $casts = [
+        'diagnostico_intervencao_id' => 'array',
+        'planejamento_implementacao_id' => 'array',
+        'anexo_exame' => 'array',
+        'anexo_outros' => 'array',
+
     ];
 
     public function Paciente()
@@ -100,5 +108,9 @@ class PlanejamentoGinecologico extends Model
 
     public function DiagnosticoIntervencao() {
         return $this->belongsTo(DiagnosticoIntervencao::class);
+    }
+
+    public function PlanejamentoImplementacao() {
+        return $this->belongsTo(PlanejamentoImplementacao::class);
     }
 }

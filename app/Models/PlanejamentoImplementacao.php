@@ -5,16 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class DiagnosticoIntervencao extends Model
+class PlanejamentoImplementacao extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-       'descricao',
-        'tipo',
-    ];
+        'descricao',
+         'tipo',
+     ];
 
-    public function PlanejamentoGinecologico() {
+     public function PlanejamentoGinecologico() {
         $this->hasMany(PlanejamentoGinecologico::class);
     }
 }
