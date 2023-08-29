@@ -2,9 +2,10 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\ReceituarioResource\Pages;
-use App\Filament\Resources\ReceituarioResource\RelationManagers;
-use App\Models\Receituario;
+use App\Filament\Resources\OrientacaoPacienteResource\Pages;
+use App\Filament\Resources\OrientacaoPacienteResource\RelationManagers;
+use App\Http\Controllers\Orientacao;
+use App\Models\OrientacaoPaciente;
 use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Components\MarkdownEditor;
@@ -15,15 +16,16 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class ReceituarioResource extends Resource
+class OrientacaoPacienteResource extends Resource
 {
-    protected static ?string $model = Receituario::class;
+    protected static ?string $model = OrientacaoPaciente::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $navigationGroup = 'Atendimentos';
 
-    protected static ?string $navigationLabel = 'Receituários';
+    protected static ?string $navigationLabel = 'Orientações para Pacientes';
+
 
     public static function form(Form $form): Form
     {
@@ -32,15 +34,14 @@ class ReceituarioResource extends Resource
                 Forms\Components\Select::make('paciente_id')
                     ->searchable()
                     ->relationship(name: 'paciente', titleAttribute: 'nome'),
-                Forms\Components\DatePicker::make('data_receituario')
+                Forms\Components\DatePicker::make('data_orientacao')
                     ->default(Carbon::now())
                     ->label('Data do Atendimento')
                     ->required(),
-                    MarkdownEditor::make('descricao')
+                MarkdownEditor::make('descricao')
                     ->label('Descrição')
                     ->required()
                     ->columnSpanFull(),
-
             ]);
     }
 
@@ -51,7 +52,7 @@ class ReceituarioResource extends Resource
                 Tables\Columns\TextColumn::make('paciente.nome')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('data_receituario')
+                 Tables\Columns\TextColumn::make('data_orientacao')
                     ->label('Data')
                     ->date()
                     ->sortable(),
@@ -71,7 +72,7 @@ class ReceituarioResource extends Resource
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
                 Tables\Actions\Action::make('Imprimir')
-                ->url(fn (Receituario $record): string => route('imprimirReceituario', $record))
+                ->url(fn (OrientacaoPaciente $record): string => route('imprimirOrientacao', $record))
                 ->openUrlInNewTab(),
             ])
             ->bulkActions([
@@ -87,7 +88,7 @@ class ReceituarioResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageReceituarios::route('/'),
+            'index' => Pages\ManageOrientacaoPacientes::route('/'),
         ];
     }
 }
