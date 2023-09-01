@@ -109,7 +109,8 @@ class ContasPagarResource extends Resource
                 Forms\Components\TextInput::make('valor_parcela')
                       ->required(),
                 Forms\Components\TextInput::make('valor_pago'),
-                Forms\Components\Textarea::make('obs'),
+                Forms\Components\Textarea::make('obs')
+                    ->label('Observações'),
             ]);
     }
     public static function table(Table $table): Table

@@ -115,7 +115,8 @@ class ContasReceberResource extends Resource
                 Forms\Components\TextInput::make('valor_parcela')
                       ->required(),
                 Forms\Components\TextInput::make('valor_recebido'),
-                Forms\Components\Textarea::make('obs'),
+                Forms\Components\Textarea::make('obs')
+                    ->label('Observações'),
             ]);
     }
 
