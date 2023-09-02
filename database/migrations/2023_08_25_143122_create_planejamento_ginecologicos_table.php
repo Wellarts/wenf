@@ -35,8 +35,8 @@ return new class extends Migration
             $table->string('parto');
             $table->string('aborto');
             $table->string('gravidez_ectopica');
-            $table->string('gravidez_ectopica_desc');
             $table->string('intercorrencias');
+            $table->string('intercorrencias_desc');
             $table->date('primeiro_parto');
             $table->date('ultimo_parto');
             $table->string('aleitamento');

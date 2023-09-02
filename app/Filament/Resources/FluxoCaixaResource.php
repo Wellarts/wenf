@@ -38,6 +38,7 @@ class FluxoCaixaResource extends Resource
                  ->required(),
 
              Forms\Components\Textarea::make('obs')
+                    ->label('Descrição')
                  ->columnSpanFull()
                  ->required(),
             ]);

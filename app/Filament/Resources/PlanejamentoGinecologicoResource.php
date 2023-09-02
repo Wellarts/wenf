@@ -175,18 +175,22 @@ class PlanejamentoGinecologicoResource extends Resource
                         Forms\Components\TextInput::make('aborto')
                             ->maxLength(255),
                         Forms\Components\Radio::make('gravidez_ectopica')
+                            ->label('Gravidez Ectópica')
+                            ->options([
+                                '1' => 'Sim',
+                                '0' => 'Não',
+                            ]),
+
+                        Forms\Components\Radio::make('intercorrencias')
+                            ->label('Intercorrências')
                             ->options([
                                 '1' => 'Sim',
                                 '0' => 'Não',
                             ])
-                            ->live()
-                            ->label('Gravidez Ectópica'),
-                        Forms\Components\TextInput::make('gravidez_ectopica_desc')
-                                ->hidden(fn (Get $get): bool => $get('gravidez_ectopica') === null || $get('gravidez_ectopica') === '0')
-                                ->label('Descrição da Gravidez Ectópica'),
-                        Forms\Components\TextInput::make('intercorrencias')
-                            ->label('Intercorrências')
-                            ->maxLength(255),
+                            ->live(),
+                        Forms\Components\TextInput::make('intercorrencias_desc')
+                                ->hidden(fn (Get $get): bool => $get('intercorrencias') === null || $get('intercorrencias') === '0')
+                                ->label('Descrição das intercorrências'),
                         Forms\Components\DatePicker::make('primeiro_parto')
                             ->label('Primeiro Parto'),
                         Forms\Components\DatePicker::make('ultimo_parto')

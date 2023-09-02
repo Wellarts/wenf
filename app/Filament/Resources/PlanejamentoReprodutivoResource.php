@@ -137,14 +137,29 @@ class PlanejamentoReprodutivoResource extends Resource
                         Forms\Components\TextInput::make('ciclo_mestrual')
                             ->label('Ciclo Mestrual')
                             ->maxLength(255),
-                        Forms\Components\TextInput::make('smp')
-                            ->label('SPM')
-                            ->maxLength(255),
+                        Forms\Components\radio::make('smp')
+                            ->options([
+                                '1' => 'Sim',
+                                '0' => 'Não',
+                            ])
+                            ->label('SPM'),
                         Forms\Components\TextInput::make('metodo_contraceptivo')
                             ->label('Método Contraceptivo')
                             ->maxLength(255),
-                        Forms\Components\TextInput::make('corrimento')
-                            ->maxLength(255),
+                        Forms\Components\Radio::make('dispareunia')
+                            ->options([
+                                '1' => 'Sim',
+                                '0' => 'Não',
+                            ]),
+                        Forms\Components\Radio::make('corrimento')
+                            ->options([
+                                '1' => 'Sim',
+                                '0' => 'Não',
+                            ])
+                            ->live(),
+                        Forms\Components\TextInput::make('corrimento_desc')
+                            ->hidden(fn (Get $get): bool => $get('corrimento') === null || $get('corrimento') === '0')
+                            ->label('Descrição do Corrimento'),
                     ]),
                 Fieldset::make('Antecedentes Obstétricos')
                     ->schema([
