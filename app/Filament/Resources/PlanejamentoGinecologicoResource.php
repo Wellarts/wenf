@@ -190,7 +190,7 @@ class PlanejamentoGinecologicoResource extends Resource
                             ->live(),
                         Forms\Components\TextInput::make('intercorrencias_desc')
                                 ->hidden(fn (Get $get): bool => $get('intercorrencias') === null || $get('intercorrencias') === '0')
-                                ->label('Descrição das intercorrências'),
+                                ->label('Descrição das Intercorrências'),
                         Forms\Components\DatePicker::make('primeiro_parto')
                             ->label('Primeiro Parto'),
                         Forms\Components\DatePicker::make('ultimo_parto')
