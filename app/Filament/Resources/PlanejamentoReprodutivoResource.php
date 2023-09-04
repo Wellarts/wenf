@@ -4,13 +4,17 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\PlanejamentoReprodutivoResource\Pages;
 use App\Filament\Resources\PlanejamentoReprodutivoResource\RelationManagers;
+use App\Models\DiagnosticoIntervencao;
 use App\Models\Estado;
 use App\Models\Paciente;
+use App\Models\PlanejamentoImplementacao;
 use App\Models\PlanejamentoReprodutivo;
 use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Components\Fieldset;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Resources\Resource;
@@ -169,34 +173,82 @@ class PlanejamentoReprodutivoResource extends Resource
                             ->maxLength(255),
                         Forms\Components\TextInput::make('aborto')
                             ->maxLength(255),
-                        Forms\Components\TextInput::make('gravidez_ectopica')
+                        Forms\Components\Radio::make('gravidez_ectopica')
                             ->label('Gravidez Ectópica')
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('intercorrencias')
+                            ->options([
+                                '1' => 'Sim',
+                                '0' => 'Não',
+                            ]),
+
+                        Forms\Components\Radio::make('intercorrencias')
                             ->label('Intercorrências')
-                            ->maxLength(255),
+                            ->options([
+                                '1' => 'Sim',
+                                '0' => 'Não',
+                            ])
+                            ->live(),
+                        Forms\Components\TextInput::make('intercorrencias_desc')
+                            ->hidden(fn (Get $get): bool => $get('intercorrencias') === null || $get('intercorrencias') === '0')
+                            ->label('Descrição das Intercorrências'),
                         Forms\Components\DatePicker::make('primeiro_parto')
                             ->label('Primeiro Parto'),
                         Forms\Components\DatePicker::make('ultimo_parto')
                             ->label('Último Parto'),
-                        Forms\Components\TextInput::make('aleitamento')
-                            ->label('Aleitamento')
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('medicacao_uso')
-                            ->label('Medicamento em Uso')
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('tabagistmo')
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('etilismo')
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('drogas')
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('sintomas_urinario')
-                            ->label('Sintomas Urinário')
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('sintomas_intestinais')
-                            ->label('Sintomas Intestinais')
-                            ->maxLength(255),
+                        Forms\Components\Radio::make('medicacao_uso')
+                            ->options([
+                                '1' => 'Sim',
+                                '0' => 'Não',
+                            ])
+                            ->live()
+                            ->label('Medicacao em Uso'),
+                        Forms\Components\TextInput::make('medicacao_uso_desc')
+                            ->hidden(fn (Get $get): bool => $get('medicacao_uso') === null || $get('medicacao_uso') === '0')
+                            ->label('Descrição da Medicação em Uso'),
+                        Forms\Components\Radio::make('aleitamento')
+                            ->options([
+                                '1' => 'Sim',
+                                '0' => 'Não',
+                            ]),
+                        Forms\Components\Radio::make('tabagismo')
+                            ->options([
+                                '1' => 'Sim',
+                                '0' => 'Não',
+                            ]),
+                        Forms\Components\Radio::make('etilismo')
+                            ->options([
+                                '1' => 'Sim',
+                                '0' => 'Não',
+                            ]),
+                        Forms\Components\Radio::make('drogas')
+                            ->options([
+                                '1' => 'Sim',
+                                '0' => 'Não',
+                            ]),
+                        Section::make('Outros Sintomas')
+                            ->columns('2')
+                            ->schema([
+                                Forms\Components\Radio::make('sintomas_urinario')
+                                    ->options([
+                                        '1' => 'Sim',
+                                        '0' => 'Não',
+                                    ])
+                                    ->live()
+                                    ->label('Sintomas Urinários'),
+                                Forms\Components\TextInput::make('sintomas_urinario_desc')
+                                    ->hidden(fn (Get $get): bool => $get('sintomas_urinario') === null || $get('sintomas_urinario') === '0')
+                                    ->label('Descrição dos Sintomas Urinário'),
+                                Forms\Components\Radio::make('sintomas_intestinais')
+                                    ->options([
+                                        '1' => 'Sim',
+                                        '0' => 'Não',
+                                    ])
+                                    ->live()
+                                    ->label('Sintomas Intestinais'),
+                                Forms\Components\TextInput::make('sintomas_intestinais_desc')
+                                    ->hidden(fn (Get $get): bool => $get('sintomas_intestinais') === null || $get('sintomas_intestinais') === '0')
+                                    ->label('Descrição dos Sintomas Intestinais'),
+
+                            ]),
 
                     ]),
 
@@ -210,57 +262,137 @@ class PlanejamentoReprodutivoResource extends Resource
                                         '0' => 'Não',
                                         '1' => 'Pessoal',
                                         '2' => 'Familiar',
-                                    ]),
+                                    ])
+                                    ->live(),
+                                Forms\Components\TextInput::make('cardiovasculares_desc')
+                                    ->hidden(fn (Get $get): bool => $get('cardiovasculares') === null || $get('cardiovasculares') === '0')
+                                    ->label('Descrição do Cardiovascular'),
                                 Forms\Components\radio::make('endocrinas')
                                     ->label('Endrocrinas:')
                                     ->options([
                                         '0' => 'Não',
                                         '1' => 'Pessoal',
                                         '2' => 'Familiar',
-                                    ]),
+                                    ])->live(),
+                                Forms\Components\TextInput::make('endocrinas_desc')
+                                    ->hidden(fn (Get $get): bool => $get('endocrinas') === null || $get('endocrinas') === '0')
+                                    ->label('Descrição das Endocrinas'),
                                 Forms\Components\radio::make('alergias')
                                     ->label('Alergias:')
                                     ->options([
                                         '0' => 'Não',
                                         '1' => 'Pessoal',
                                         '2' => 'Familiar',
-                                    ]),
-                                Forms\Components\radio::make('vacinacao')
-                                    ->label('Vacinação:')
-                                    ->options([
-                                        '0' => 'Não',
-                                        '1' => 'Pessoal',
-                                        '2' => 'Familiar',
-                                    ]),
+                                    ])->live(),
+                                Forms\Components\TextInput::make('alergias_desc')
+                                    ->hidden(fn (Get $get): bool => $get('alergias') === null || $get('alergias') === '0')
+                                    ->label('Descrição das Alergias'),
                                 Forms\Components\radio::make('ist_s')
                                     ->label('IST,S:')
                                     ->options([
                                         '0' => 'Não',
                                         '1' => 'Pessoal',
                                         '2' => 'Familiar',
-                                    ]),
+                                    ])->live(),
+                                Forms\Components\TextInput::make('ist_s_desc')
+                                    ->hidden(fn (Get $get): bool => $get('ist_s') === null || $get('ist_s') === '0')
+                                    ->label('Descrição das IST,S'),
                                 Forms\Components\radio::make('cirurgias_transfusao')
                                     ->label('Cirurgias/Transfusão:')
                                     ->options([
                                         '0' => 'Não',
                                         '1' => 'Pessoal',
                                         '2' => 'Familiar',
-                                    ]),
+                                    ])->live(),
+                                Forms\Components\TextInput::make('cirurgias_transfusao_desc')
+                                    ->hidden(fn (Get $get): bool => $get('cirurgias_transfusao') === null || $get('cirurgias_transfusao') === '0')
+                                    ->label('Descrição das Cirurgias e Transfusões'),
                                 Forms\Components\radio::make('cancer')
                                     ->label('Cancer:')
                                     ->options([
                                         '0' => 'Não',
                                         '1' => 'Pessoal',
                                         '2' => 'Familiar',
-                                    ]),
-                                Forms\Components\radio::make('outros:')
+                                    ])->live(),
+                                Forms\Components\TextInput::make('cancer_desc')
+                                    ->hidden(fn (Get $get): bool => $get('cancer') === null || $get('cancer') === '0')
+                                    ->label('Descrição do Cancer'),
+                                Forms\Components\radio::make('outros')
                                     ->options([
                                         '0' => 'Não',
                                         '1' => 'Pessoal',
                                         '2' => 'Familiar',
-                                    ]),
+                                    ])->live(),
+                                Forms\Components\TextInput::make('outros_desc')
+                                    ->hidden(fn (Get $get): bool => $get('outros') === null || $get('outros') === '0')
+                                    ->label('Descrição dos Outros'),
 
                             ]),
+
+                    ]),
+                    Fieldset::make('Vacinas')
+                    ->schema([
+                        Section::make('Antitetânica (dT)')
+                            ->columns('5')
+                            ->schema([
+                                Forms\Components\radio::make('vacina_dt')
+                                    ->label('')
+                                    ->options([
+                                        '0' => 'Sem informação de imunização',
+                                        '1' => 'Imunizada há menos de 5 anos',
+                                        '2' => 'Imunizada há mais de 5 anos',
+                                    ])->live(),
+                                Forms\Components\DatePicker::make('vacina_dt_data_1')
+                                    ->hidden(fn (Get $get): bool => $get('vacina_dt') === null || $get('vacina_dt') === '0')
+                                    ->label('1º Dose'),
+                                Forms\Components\DatePicker::make('vacina_dt_data_2')
+                                    ->hidden(fn (Get $get): bool => $get('vacina_dt') === null || $get('vacina_dt') === '0')
+                                    ->label('2º Dose'),
+                                Forms\Components\DatePicker::make('vacina_dt_data_3')
+                                    ->hidden(fn (Get $get): bool => $get('vacina_dt') === null || $get('vacina_dt') === '0')
+                                    ->label('3º Dose'),
+                                Forms\Components\DatePicker::make('vacina_dt_reforco')
+                                    ->hidden(fn (Get $get): bool => $get('vacina_dt') === null || $get('vacina_dt') === '0')
+                                    ->label('Reforco'),
+                            ]),
+                        Section::make('Vacina HPV')
+                            ->columns('3')
+                            ->schema([
+                                Forms\Components\radio::make('vacina_hpv')
+                                    ->label('')
+                                    ->options([
+                                        '0' => 'Não',
+                                        '1' => 'Sim',
+
+                                    ])->live(),
+                                Forms\Components\DatePicker::make('vacina_hpv_data_1')
+                                    ->hidden(fn (Get $get): bool => $get('vacina_hpv') === null || $get('vacina_hpv') === '0')
+                                    ->label('1º Dose'),
+                                Forms\Components\DatePicker::make('vacina_hpv_data_2')
+                                    ->hidden(fn (Get $get): bool => $get('vacina_hpv') === null || $get('vacina_hpv') === '0')
+                                    ->label('2º Dose'),
+                            ]),
+                        Section::make('Vacina Hepatite B')
+                            ->columns('3')
+                            ->schema([
+                                Forms\Components\radio::make('vacina_hepatite_b')
+                                    ->label('')
+                                    ->options([
+                                        '0' => 'Não',
+                                        '1' => 'Sim',
+
+                                    ])->live(),
+                                Forms\Components\DatePicker::make('vacina_hepatite_b_data_1')
+                                    ->hidden(fn (Get $get): bool => $get('vacina_hepatite_b') === null || $get('vacina_hepatite_b') === '0')
+                                    ->label('1º Dose'),
+                                Forms\Components\DatePicker::make('vacina_hepatite_b_data_2')
+                                    ->hidden(fn (Get $get): bool => $get('vacina_hepatite_b') === null || $get('vacina_hepatite_b') === '0')
+                                    ->label('2º Dose'),
+                            ]),
+
+
+
+
 
                     ]),
                 Fieldset::make('Histório de Exames Ginecológicos')
@@ -279,16 +411,31 @@ class PlanejamentoReprodutivoResource extends Resource
 
                 Fieldset::make('Diagnósticos e Avaliações')
                     ->schema([
-                        Forms\Components\Textarea::make('diagnostico')
-                            ->label('Diagnóstico de Enfermagem')
-                            ->columnSpanFull(),
-                        Forms\Components\Textarea::make('planejamento')
-                            ->label('Planejamento/Implementação')
+                        Forms\Components\Select::make('diagnostico_intervencao_id')
+                            ->multiple()
+                            ->getSearchResultsUsing(fn (string $search): array => DiagnosticoIntervencao::where('descricao', 'like', "%{$search}%")->limit(50)->pluck('descricao', 'id')->toArray())
+                            ->getOptionLabelsUsing(fn (array $values): array => DiagnosticoIntervencao::whereIn('id', $values)->pluck('descricao', 'id')->toArray())
+                            ->label('Diagnósticos de Enfermagem'),
+                        Forms\Components\Select::make('planejamento_implementacao_id')
+                            ->multiple()
+                            ->getSearchResultsUsing(fn (string $search): array => PlanejamentoImplementacao::where('descricao', 'like', "%{$search}%")->limit(50)->pluck('descricao', 'id')->toArray())
+                            ->getOptionLabelsUsing(fn (array $values): array => PlanejamentoImplementacao::whereIn('id', $values)->pluck('descricao', 'id')->toArray())
+                            ->label('Planejamentos/Implementações'),
+                        Forms\Components\Textarea::make('planejamento_desc')
+                            ->label('Descrição do planejamento')
                             ->columnSpanFull(),
                         Forms\Components\Textarea::make('avaliacao')
-                             ->label('Avaliação/Retorno')
-                             ->columnSpanFull(),
-                        ])
+                            ->label('Avaliação/Retorno')
+                            ->columnSpanFull(),
+                        FileUpload::make('anexo_termo')
+                            ->multiple()
+                            ->label('Termo')
+                            ->downloadable(),
+                        FileUpload::make('anexo_outros')
+                            ->multiple()
+                            ->label('Outros Anexos')
+                            ->downloadable()
+                    ])
             ]);
     }
 
@@ -305,7 +452,7 @@ class PlanejamentoReprodutivoResource extends Resource
                     ->dateTime()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('queixa_principal')
-                   ->label('Queixa Principal'),
+                    ->label('Queixa Principal'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

@@ -42,7 +42,7 @@ return new class extends Migration
             $table->string('aleitamento');
             $table->string('medicacao_uso');
             $table->string('medicacao_uso_desc');
-            $table->string('tabagistmo');
+            $table->string('tabagismo');
             $table->string('etilismo');
             $table->string('drogas');
             $table->string('sintomas_urinario');
