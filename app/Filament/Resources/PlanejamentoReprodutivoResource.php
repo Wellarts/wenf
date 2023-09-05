@@ -373,7 +373,7 @@ class PlanejamentoReprodutivoResource extends Resource
                                     ->label('2º Dose'),
                             ]),
                         Section::make('Vacina Hepatite B')
-                            ->columns('3')
+                            ->columns('4')
                             ->schema([
                                 Forms\Components\radio::make('vacina_hepatite_b')
                                     ->label('')
@@ -388,6 +388,9 @@ class PlanejamentoReprodutivoResource extends Resource
                                 Forms\Components\DatePicker::make('vacina_hepatite_b_data_2')
                                     ->hidden(fn (Get $get): bool => $get('vacina_hepatite_b') === null || $get('vacina_hepatite_b') === '0')
                                     ->label('2º Dose'),
+                                Forms\Components\DatePicker::make('vacina_hepatite_b_data_3')
+                                    ->hidden(fn (Get $get): bool => $get('vacina_hepatite_b') === null || $get('vacina_hepatite_b') === '0')
+                                    ->label('3º Dose'),
                             ]),
 
 
