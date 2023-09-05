@@ -56,6 +56,18 @@ return new class extends Migration
             $table->string('alergias');
             $table->string('alergias_desc');
             $table->string('vacinacao');
+            $table->string('vacina_dt');
+            $table->date('vacina_dt_data_1');
+            $table->date('vacina_dt_data_2');
+            $table->date('vacina_dt_data_3');
+            $table->date('vacina_dt_reforco');
+            $table->string('vacina_hpv');
+            $table->string('vacina_hpv_data_1');
+            $table->string('vacina_hpv_data_2');
+            $table->string('vacina_hepatite_b');
+            $table->date('vacina_hepatite_b_data_1');
+            $table->date('vacina_hepatite_b_data_2');
+            $table->date('vacina_hepatite_b_data_3');
             $table->string('ist_s');
             $table->string('ist_s_desc');
             $table->string('cirurgias_transfusao');

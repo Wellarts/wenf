@@ -32,6 +32,14 @@ class Paciente extends Model
         return $this->hasMany(PlanejamentoReprodutivo::class);
     }
 
+    public function PlanejamentoGinecologico() {
+        return $this->hasMany(PlanejamentoGinecologico::class);
+    }
+
+    public function Perinatal() {
+        return $this->hasMany(Perinatal::class);
+    }
+
     public function ContasReceber() {
         return $this->hasMany(ContasReceber::class);
     }
