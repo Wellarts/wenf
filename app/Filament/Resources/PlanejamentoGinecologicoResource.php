@@ -501,7 +501,7 @@ class PlanejamentoGinecologicoResource extends Resource
                 Tables\Columns\TextColumn::make('data_atendimento')
                     ->label('Data do Atendimento')
                     ->alignCenter()
-                    ->date()
+                    ->date('d/m/Y')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('queixa_principal')
                     ->label('Queixa Principal'),
