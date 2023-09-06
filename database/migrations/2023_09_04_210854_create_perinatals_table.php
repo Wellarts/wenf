@@ -24,8 +24,8 @@ return new class extends Migration
             $table->string('bebe_2500');
             $table->string('bebe_4500');
             $table->string('pre_eclampsia');
-            $table->string('gesta_previa');
-            $table->string('gesta_previa_ectopia');
+            $table->string('gesta');
+            $table->string('gesta_ectopia');
             $table->string('abortos');
             $table->string('abortos_3');
             $table->string('parto_vaginal');
@@ -49,6 +49,10 @@ return new class extends Migration
             $table->date('vacina_hepatite_b_data_1');
             $table->date('vacina_hepatite_b_data_2');
             $table->date('vacina_hepatite_b_data_3');
+            $table->string('vacina_influenza');
+            $table->string('vacina_vacina_dtpa');
+            $table->date('vacina_influenza_data');
+            $table->date('vacina_vacina_dtpa_data');
             $table->timestamps();
         });
     }

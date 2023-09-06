@@ -9,7 +9,9 @@ use App\Models\Perinatal;
 use Filament\Forms;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -113,56 +115,161 @@ class PerinatalResource extends Resource
                                     ->label('Gravidez Planejada'),
 
                                 Forms\Components\Toggle::make('bebe_2500')
+                                    ->inline(false)
                                     ->label('Bebê < 2.500g'),
 
                                 Forms\Components\Toggle::make('bebe_4500')
+                                    ->inline(false)
                                     ->label('Bebê > 4.500g'),
 
-                            Forms\Components\TextInput::make('pre_eclampsia')
-                                ->maxLength(255),
-                            Forms\Components\TextInput::make('gesta_previa')
-                                ->maxLength(255),
-                            Forms\Components\TextInput::make('gesta_previa_ectopia')
-                                ->maxLength(255),
-                            Forms\Components\TextInput::make('abortos')
-                                ->maxLength(255),
-                            Forms\Components\TextInput::make('abortos_3')
-                                ->maxLength(255),
-                            Forms\Components\TextInput::make('parto_vaginal')
-                                ->maxLength(255),
-                            Forms\Components\TextInput::make('cesarea')
-                                ->maxLength(255),
-                            Forms\Components\TextInput::make('cesarea_previa_2')
-                                ->maxLength(255),
-                            Forms\Components\TextInput::make('nascido_vivo')
-                                ->maxLength(255),
-                            Forms\Components\TextInput::make('nascido_vivo_vivem')
-                                ->maxLength(255),
-                            Forms\Components\TextInput::make('nascido_morto')
-                                ->maxLength(255),
-                            Forms\Components\TextInput::make('morto_semana_1')
-                                ->maxLength(255),
-                            Forms\Components\TextInput::make('morto_depois_semana_1')
-                                ->maxLength(255),
-                            Forms\Components\TextInput::make('final_gesta_anterior_1_ano')
-                                ->maxLength(255),
-                            Forms\Components\TextInput::make('vacina_dt')
-                                ->maxLength(255),
-                            Forms\Components\DatePicker::make('vacina_dt_data_1'),
-                            Forms\Components\DatePicker::make('vacina_dt_data_2'),
-                            Forms\Components\DatePicker::make('vacina_dt_data_3'),
-                            Forms\Components\DatePicker::make('vacina_dt_reforco'),
-                            Forms\Components\TextInput::make('vacina_hpv')
-                                ->maxLength(255),
-                            Forms\Components\TextInput::make('vacina_hpv_data_1')
-                                ->maxLength(255),
-                            Forms\Components\TextInput::make('vacina_hpv_data_2')
-                                ->maxLength(255),
-                            Forms\Components\TextInput::make('vacina_hepatite_b')
-                                ->maxLength(255),
-                            Forms\Components\DatePicker::make('vacina_hepatite_b_data_1'),
-                            Forms\Components\DatePicker::make('vacina_hepatite_b_data_2'),
-                            Forms\Components\DatePicker::make('vacina_hepatite_b_data_3'),
+                                Forms\Components\Toggle::make('pre_eclampsia')
+                                ->inline(false)
+                                    ->label('Pré-eclâmpsia'),
+                                Forms\Components\TextInput::make('gesta')
+                                    ->numeric(),
+                                Forms\Components\Toggle::make('gesta_ectopia')
+                                ->inline(false)
+                                    ->label('Gestação Ectópica'),
+                                Forms\Components\TextInput::make('abortos')
+                                    ->numeric()
+                                    ->maxLength(255),
+                                Forms\Components\Toggle::make('abortos_3')
+                                ->inline(false)
+                                    ->label('3 ou + abortos'),
+                                Forms\Components\TextInput::make('parto_vaginal')
+                                    ->numeric()
+                                    ->label('Parto Vaginal')
+                                    ->maxLength(255),
+                                Forms\Components\TextInput::make('cesarea')
+                                    ->numeric()
+                                    ->maxLength(255),
+                                Forms\Components\Toggle::make('cesarea_previa_2')
+                                       ->inline(false)
+
+                                    ->label('2 cesarea prévias'),
+                                Forms\Components\TextInput::make('nascido_vivo')
+                                    ->numeric()
+                                    ->label('Nascidos Vivos')
+                                    ->maxLength(255),
+                                Forms\Components\TextInput::make('nascido_vivo_vivem')
+                                    ->numeric()
+                                    ->label('Nascido Vivo - Vivem')
+                                    ->maxLength(255),
+                                Forms\Components\TextInput::make('nascido_morto')
+                                    ->numeric()
+                                    ->label('Nascidos Mortos')
+                                    ->maxLength(255),
+                                Forms\Components\TextInput::make('morto_semana_1')
+                                    ->numeric()
+                                    ->label('Morreram na 1º Semana')
+                                    ->maxLength(255),
+                                Forms\Components\TextInput::make('morto_depois_semana_1')
+                                    ->numeric()
+                                    ->label('Morreram depois na 1º Semana')
+                                    ->maxLength(255),
+                                Forms\Components\Radio::make('final_gesta_anterior_1_ano')
+                                    ->label('Final da gestação anterior há 1 ano')
+                                    ->options([
+                                        '0' => 'Não',
+                                        '1' => 'Sim',
+                                    ]),
+                                Fieldset::make('Vacinas')
+                                    ->schema([
+                                        Section::make('Vacina Antitetânica (dT)')
+                                            ->columns('5')
+                                            ->schema([
+                                                Forms\Components\radio::make('vacina_dt')
+                                                    ->label('')
+                                                    ->options([
+                                                        '0' => 'Sem informação de imunização',
+                                                        '1' => 'Imunizada há menos de 5 anos',
+                                                        '2' => 'Imunizada há mais de 5 anos',
+                                                    ])->live(),
+                                                Forms\Components\DatePicker::make('vacina_dt_data_1')
+                                                    ->hidden(fn (Get $get): bool => $get('vacina_dt') === null || $get('vacina_dt') === '0')
+                                                    ->label('1º Dose'),
+                                                Forms\Components\DatePicker::make('vacina_dt_data_2')
+                                                    ->hidden(fn (Get $get): bool => $get('vacina_dt') === null || $get('vacina_dt') === '0')
+                                                    ->label('2º Dose'),
+                                                Forms\Components\DatePicker::make('vacina_dt_data_3')
+                                                    ->hidden(fn (Get $get): bool => $get('vacina_dt') === null || $get('vacina_dt') === '0')
+                                                    ->label('3º Dose'),
+                                                Forms\Components\DatePicker::make('vacina_dt_reforco')
+                                                    ->hidden(fn (Get $get): bool => $get('vacina_dt') === null || $get('vacina_dt') === '0')
+                                                    ->label('Reforco'),
+                                            ]),
+                                        Section::make('Vacina HPV')
+                                            ->columns('3')
+                                            ->schema([
+                                                Forms\Components\radio::make('vacina_hpv')
+                                                    ->label('')
+                                                    ->options([
+                                                        '0' => 'Não',
+                                                        '1' => 'Sim',
+
+                                                    ])->live(),
+                                                Forms\Components\DatePicker::make('vacina_hpv_data_1')
+                                                    ->hidden(fn (Get $get): bool => $get('vacina_hpv') === null || $get('vacina_hpv') === '0')
+                                                    ->label('1º Dose'),
+                                                Forms\Components\DatePicker::make('vacina_hpv_data_2')
+                                                    ->hidden(fn (Get $get): bool => $get('vacina_hpv') === null || $get('vacina_hpv') === '0')
+                                                    ->label('2º Dose'),
+                                            ]),
+                                        Section::make('Vacina Hepatite B')
+                                            ->columns('4')
+                                            ->schema([
+                                                Forms\Components\radio::make('vacina_hepatite_b')
+                                                    ->label('')
+                                                    ->options([
+                                                        '0' => 'Não',
+                                                        '1' => 'Sim',
+
+                                                    ])->live(),
+                                                Forms\Components\DatePicker::make('vacina_hepatite_b_data_1')
+                                                    ->hidden(fn (Get $get): bool => $get('vacina_hepatite_b') === null || $get('vacina_hepatite_b') === '0')
+                                                    ->label('1º Dose'),
+                                                Forms\Components\DatePicker::make('vacina_hepatite_b_data_2')
+                                                    ->hidden(fn (Get $get): bool => $get('vacina_hepatite_b') === null || $get('vacina_hepatite_b') === '0')
+                                                    ->label('2º Dose'),
+                                                Forms\Components\DatePicker::make('vacina_hepatite_b_data_3')
+                                                    ->hidden(fn (Get $get): bool => $get('vacina_hepatite_b') === null || $get('vacina_hepatite_b') === '0')
+                                                    ->label('3º Dose'),
+                                            ]),
+                                        Section::make('Vacina Influenza')
+                                            ->columns('2')
+                                            ->schema([
+                                                Forms\Components\radio::make('vacina_influenza')
+                                                    ->label('')
+                                                    ->options([
+                                                        '0' => 'Não',
+                                                        '1' => 'Sim',
+
+                                                    ])->live(),
+                                                Forms\Components\DatePicker::make('vacina_influenza_data')
+                                                    ->hidden(fn (Get $get): bool => $get('vacina_influenza') === null || $get('vacina_influenza') === '0')
+                                                    ->label('Data'),
+                                            ]),
+                                        Section::make('Vacina Influenza')
+                                            ->columns('2')
+                                            ->schema([
+                                                Forms\Components\radio::make('vacina_dtpa')
+                                                    ->label('')
+                                                    ->options([
+                                                        '0' => 'Não',
+                                                        '1' => 'Sim',
+
+                                                    ])->live(),
+                                                Forms\Components\DatePicker::make('vacina_dtpa_data')
+                                                    ->hidden(fn (Get $get): bool => $get('vacina_dtpa') === null || $get('vacina_dtpa') === '0')
+                                                    ->label('Data'),
+                                            ]),
+
+
+
+
+                                    ]),
+
+
 
                             ]),
 

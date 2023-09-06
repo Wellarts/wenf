@@ -21,8 +21,8 @@ class Perinatal extends Model
            'bebe_2500',
            'bebe_4500',
            'pre_eclampsia',
-           'gesta_previa',
-           'gesta_previa_ectopia',
+           'gesta',
+           'gesta_ectopia',
            'abortos',
            'abortos_3',
            'parto_vaginal',
@@ -46,6 +46,10 @@ class Perinatal extends Model
            'vacina_hepatite_b_data_1',
            'vacina_hepatite_b_data_2',
            'vacina_hepatite_b_data_3',
+           'vacina_influenza',
+           'vacina_dtpa',
+           'vacina_influenza_data',
+           'vacina_dtpa_data',
     ];
 
     public function Paciente()
