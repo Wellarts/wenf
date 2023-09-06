@@ -286,7 +286,7 @@ class PerinatalResource extends Resource
                                             ])->columnSpanFull(),
                                     ]),
 
-                                    Fieldset::make('Ultrassonografias')
+                                Fieldset::make('Ultrassonografias')
                                     ->columns('2')
                                     ->schema([
                                         Repeater::make('ultrassons')
@@ -300,17 +300,56 @@ class PerinatalResource extends Resource
                                                         TextInput::make('ig_usg')
                                                             ->label('IG USG'),
                                                         TextInput::make('peso_fetal')
-                                                            ->numeric()
                                                             ->label('Peso Fetal'),
                                                         TextInput::make('placeta')
-                                                            ->numeric()
                                                             ->label('Placeta'),
                                                         TextInput::make('liquido')
-                                                            ->numeric()
                                                             ->label('Líquido'),
                                                         TextInput::make('outros')
-                                                            ->numeric()
                                                             ->label('Outros'),
+                                                    ])
+                                            ])->columnSpanFull(),
+                                    ]),
+
+                                Fieldset::make('Acompanhamentos')
+                                    ->columns('2')
+                                    ->schema([
+                                        Repeater::make('acompanhamentos')
+                                            ->label('')
+                                            ->schema([
+                                                Grid::make(5)
+                                                    ->schema([
+                                                        TextInput::make('consultas')
+                                                            ->datalist([
+                                                                '1º Consulta',
+                                                                '2º Consulta',
+                                                                '3º Consulta',
+                                                                '4º Consulta',
+                                                                '5º Consulta',
+                                                                '6º Consulta',
+                                                                '7º Consulta',
+                                                                '8º Consulta',
+                                                                '9º Consulta',
+                                                                '10º Consulta',
+
+                                                            ]),
+                                                        DatePicker::make('data')
+                                                            ->label('Data'),
+                                                        TextInput::make('queixas')
+                                                            ->columnSpan('2')
+                                                            ->label('Queixas'),
+                                                        TextInput::make('ig_dum_usg')
+                                                            ->label('IG DUM/USG'),
+                                                        TextInput::make('peso_imc')
+                                                            ->label('Peso (kg) / IMC'),
+                                                        TextInput::make('edema')
+                                                            ->label('Edema'),
+                                                        TextInput::make('pressao')
+                                                            ->label('Pressão Arterial (mmHG)'),
+                                                        TextInput::make('altura_ulterina')
+                                                            ->label('Altura Uterina (cm)'),
+                                                        TextInput::make('apresentacao_fetal')
+                                                            ->label('Apresentação Fetal'),
                                                     ])
                                             ])->columnSpanFull(),
                                     ])
@@ -437,9 +476,7 @@ class PerinatalResource extends Resource
 
     public static function getRelations(): array
     {
-        return [
-           
-        ];
+        return [];
     }
 
     public static function getPages(): array

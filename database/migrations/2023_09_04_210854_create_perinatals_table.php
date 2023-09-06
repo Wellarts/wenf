@@ -55,6 +55,7 @@ return new class extends Migration
             $table->date('vacina_vacina_dtpa_data');
             $table->json('exames');
             $table->json('ultrassons');
+            $table->json('acompanhamentos');
             $table->timestamps();
         });
     }
