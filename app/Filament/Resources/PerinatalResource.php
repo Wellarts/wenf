@@ -3,13 +3,17 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\PerinatalResource\Pages;
-use App\Filament\Resources\PerinatalResource\RelationManagers;
 use App\Models\Estado;
+use App\Models\Exame;
 use App\Models\Perinatal;
 use Filament\Forms;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Resources\Resource;
@@ -123,18 +127,18 @@ class PerinatalResource extends Resource
                                     ->label('Bebê > 4.500g'),
 
                                 Forms\Components\Toggle::make('pre_eclampsia')
-                                ->inline(false)
+                                    ->inline(false)
                                     ->label('Pré-eclâmpsia'),
                                 Forms\Components\TextInput::make('gesta')
                                     ->numeric(),
                                 Forms\Components\Toggle::make('gesta_ectopia')
-                                ->inline(false)
+                                    ->inline(false)
                                     ->label('Gestação Ectópica'),
                                 Forms\Components\TextInput::make('abortos')
                                     ->numeric()
                                     ->maxLength(255),
                                 Forms\Components\Toggle::make('abortos_3')
-                                ->inline(false)
+                                    ->inline(false)
                                     ->label('3 ou + abortos'),
                                 Forms\Components\TextInput::make('parto_vaginal')
                                     ->numeric()
@@ -144,7 +148,7 @@ class PerinatalResource extends Resource
                                     ->numeric()
                                     ->maxLength(255),
                                 Forms\Components\Toggle::make('cesarea_previa_2')
-                                       ->inline(false)
+                                    ->inline(false)
 
                                     ->label('2 cesarea prévias'),
                                 Forms\Components\TextInput::make('nascido_vivo')
@@ -264,10 +268,52 @@ class PerinatalResource extends Resource
                                                     ->label('Data'),
                                             ]),
 
-
-
-
                                     ]),
+                                Fieldset::make('Exames')
+                                    ->columns('2')
+                                    ->schema([
+                                        Repeater::make('exames')
+                                            ->label('')
+                                            ->schema([
+                                                Grid::make(3)
+                                                    ->schema([
+                                                        Select::make('exame_id')
+                                                            ->label('Exame')
+                                                            ->options(Exame::all()->pluck('nome', 'id')),
+                                                        DatePicker::make('data'),
+                                                        TextInput::make('resultado'),
+                                                    ])
+                                            ])->columnSpanFull(),
+                                    ]),
+
+                                    Fieldset::make('Ultrassonografias')
+                                    ->columns('2')
+                                    ->schema([
+                                        Repeater::make('ultrassons')
+                                            ->label('')
+                                            ->schema([
+                                                Grid::make(7)
+                                                    ->schema([
+                                                        DatePicker::make('data'),
+                                                        TextInput::make('ig_dum')
+                                                            ->label('IG DUM'),
+                                                        TextInput::make('ig_usg')
+                                                            ->label('IG USG'),
+                                                        TextInput::make('peso_fetal')
+                                                            ->numeric()
+                                                            ->label('Peso Fetal'),
+                                                        TextInput::make('placeta')
+                                                            ->numeric()
+                                                            ->label('Placeta'),
+                                                        TextInput::make('liquido')
+                                                            ->numeric()
+                                                            ->label('Líquido'),
+                                                        TextInput::make('outros')
+                                                            ->numeric()
+                                                            ->label('Outros'),
+                                                    ])
+                                            ])->columnSpanFull(),
+                                    ])
 
 
 
@@ -392,7 +438,7 @@ class PerinatalResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+           
         ];
     }
 

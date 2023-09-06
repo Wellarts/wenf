@@ -50,10 +50,29 @@ class Perinatal extends Model
            'vacina_dtpa',
            'vacina_influenza_data',
            'vacina_dtpa_data',
+           'exames',
+           'ultrassons',
     ];
 
-    public function Paciente()
-    {
+    protected $casts = [
+        'exames' => 'array',
+        'ultrassons' => 'array',
+        
+    ];
+
+    public function Paciente() {
         return $this->belongsTo(Paciente::class);
     }
+
+    public function ExamePerinatal() 
+    {
+       return $this->hasMany(ExamePerinatal::class);
+    }
+
+    public function Ultrassonografia() {
+        return $this->hasMany(Ultrassonografia::class);
+     }
+
+
+
 }

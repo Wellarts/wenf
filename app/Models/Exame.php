@@ -13,4 +13,12 @@ class Exame extends Model
         'nome',
 
     ];
+
+    public function Perinatal() {
+        return $this->belongsTo(Perinatal::class);
+    }
+
+    public function ExamePerinatal() {
+        return $this->hasMany(ExamePerinatal::class);
+    }
 }

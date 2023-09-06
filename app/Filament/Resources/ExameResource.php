@@ -19,6 +19,10 @@ class ExameResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?string $navigationLabel = 'Exames';
+
+    protected static ?string $navigationGroup = 'Cadastros';
+
     public static function form(Form $form): Form
     {
         return $form
