@@ -58,7 +58,7 @@ class Perinatal extends Model
     protected $casts = [
         'exames' => 'array',
         'ultrassons' => 'array',
-        'semanas_gestacao' => 'array',
+        'acompanhamentos' => 'array',
 
     ];
 

@@ -10,10 +10,13 @@ class ListPerinatals extends ListRecords
 {
     protected static string $resource = PerinatalResource::class;
 
-    protected function getHeaderActions(): array
+    protected static ?string $title = 'Perinatal';
+
+        protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->label('Novo'),
         ];
     }
 }

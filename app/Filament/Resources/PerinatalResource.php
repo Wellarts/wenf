@@ -333,7 +333,7 @@ class PerinatalResource extends Resource
                                                                 '10º Consulta',
 
                                                             ]),
-                                                        DatePicker::make('data')
+                                                       DatePicker::make('data')
                                                             ->label('Data'),
                                                         TextInput::make('queixas')
                                                             ->columnSpan('2')
@@ -350,6 +350,9 @@ class PerinatalResource extends Resource
                                                             ->label('Altura Uterina (cm)'),
                                                         TextInput::make('apresentacao_fetal')
                                                             ->label('Apresentação Fetal'),
+                                                        TextInput::make('evolucao')
+                                                            ->label('Evolução')
+                                                            ->columnSpanFull(),
                                                     ])
                                             ])->columnSpanFull(),
                                     ])
@@ -366,89 +369,14 @@ class PerinatalResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('paciente_id')
-                    ->numeric()
-                    ->sortable(),
+                Tables\Columns\TextColumn::make('paciente.nome')
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('peso')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('altura')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('dum')
-                    ->date()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('dpp')
-                    ->date()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('dpp_eco')
-                    ->date()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('gravidez_planejada')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('parto')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('bebe_2500')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('bebe_4500')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('pre_eclampsia')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('gesta_previa')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('gesta_previa_ectopia')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('abortos')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('abortos_3')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('parto_vaginal')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('cesarea')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('cesarea_previa_2')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('nascido_vivo')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('nascido_vivo_vivem')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('nascido_morto')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('morto_semana_1')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('morto_depois_semana_1')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('final_gesta_anterior_1_ano')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('vacina_dt')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('vacina_dt_data_1')
-                    ->date()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('vacina_dt_data_2')
-                    ->date()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('vacina_dt_data_3')
-                    ->date()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('vacina_dt_reforco')
-                    ->date()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('vacina_hpv')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('vacina_hpv_data_1')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('vacina_hpv_data_2')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('vacina_hepatite_b')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('vacina_hepatite_b_data_1')
-                    ->date()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('vacina_hepatite_b_data_2')
-                    ->date()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('vacina_hepatite_b_data_3')
-                    ->date()
-                    ->sortable(),
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
