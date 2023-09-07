@@ -9,4 +9,6 @@ use Filament\Resources\Pages\CreateRecord;
 class CreatePerinatal extends CreateRecord
 {
     protected static string $resource = PerinatalResource::class;
+
+    protected static ?string $title = 'Pré-Natal';
 }

@@ -10,6 +10,8 @@ class EditPerinatal extends EditRecord
 {
     protected static string $resource = PerinatalResource::class;
 
+    protected static ?string $title = 'Pré-Natal';
+
     protected function getHeaderActions(): array
     {
         return [

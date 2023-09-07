@@ -31,7 +31,7 @@ class PerinatalResource extends Resource
 
     protected static ?string $navigationGroup = 'Atendimentos';
 
-    protected static ?string $navigationLabel = 'Perinatal';
+    protected static ?string $navigationLabel = 'Pré-Natal';
 
     public static function form(Form $form): Form
     {
