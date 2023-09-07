@@ -6,6 +6,7 @@ use App\Filament\Resources\PerinatalResource\Pages;
 use App\Models\Estado;
 use App\Models\Exame;
 use App\Models\Perinatal;
+use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Fieldset;
@@ -96,6 +97,9 @@ class PerinatalResource extends Resource
                                             ->columnSpanFull(),
                                     ]),
                             ]),
+                        Forms\Components\DatePicker::make('data')
+                             ->default(Carbon::now())
+                            ->label('Data do Atendimento'),
                         Forms\Components\TextInput::make('peso')
                             ->maxLength(255),
                         Forms\Components\TextInput::make('altura')
@@ -372,6 +376,9 @@ class PerinatalResource extends Resource
                 Tables\Columns\TextColumn::make('paciente.nome')
                     ->sortable()
                     ->searchable(),
+                Tables\Columns\TextColumn::make('data')
+                    ->date('d/m/Y')
+                    ->label('Data do Atendimento'),
                 Tables\Columns\TextColumn::make('peso')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('altura')

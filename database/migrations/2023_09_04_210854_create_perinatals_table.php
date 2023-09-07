@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('perinatals', function (Blueprint $table) {
             $table->id();
             $table->foreignId('paciente_id');
+            $table->date('data');
             $table->string('peso');
             $table->string('altura');
             $table->date('dum');
