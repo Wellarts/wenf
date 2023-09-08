@@ -43,6 +43,7 @@ return new class extends Migration
             $table->date('vacina_dt_data_2');
             $table->date('vacina_dt_data_3');
             $table->date('vacina_dt_reforco');
+            $table->date('vacina_dtpa');
             $table->string('vacina_hpv');
             $table->string('vacina_hpv_data_1');
             $table->string('vacina_hpv_data_2');
@@ -51,9 +52,7 @@ return new class extends Migration
             $table->date('vacina_hepatite_b_data_2');
             $table->date('vacina_hepatite_b_data_3');
             $table->string('vacina_influenza');
-            $table->string('vacina_vacina_dtpa');
             $table->date('vacina_influenza_data');
-            $table->date('vacina_vacina_dtpa_data');
             $table->json('exames');
             $table->json('ultrassons');
             $table->json('acompanhamentos');

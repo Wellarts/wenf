@@ -18,6 +18,7 @@ class Paciente extends Model
         'profissão',
         'telefone',
         'cor',
+        'obs',
     ];
 
     public function Estado() {

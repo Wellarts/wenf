@@ -41,7 +41,8 @@ return new class extends Migration
             $table->date('primeiro_parto');
             $table->date('ultimo_parto');
             $table->string('aleitamento');
-            $table->string('medicacao_uso');
+            $table->text('medicacao_uso', 100);
+            $table->string('medicacao_uso_desc');
             $table->string('tabagismo');
             $table->string('etilismo');
             $table->string('drogas');
@@ -51,11 +52,14 @@ return new class extends Migration
             $table->string('sintomas_intestinais_desc');
             $table->string('cardiovasculares');
             $table->string('cardiovasculares_desc');
+            $table->string('cardiovasculares_f');
+            $table->string('cardiovasculares_f_desc');
             $table->string('endocrinas');
             $table->string('endocrinas_desc');
+            $table->string('endocrinas_f');
+            $table->string('endocrinas_f_desc');
             $table->string('alergias');
             $table->string('alergias_desc');
-            $table->string('vacinacao');
             $table->string('vacina_dt');
             $table->date('vacina_dt_data_1');
             $table->date('vacina_dt_data_2');
@@ -74,8 +78,12 @@ return new class extends Migration
             $table->string('cirurgias_transfusao_desc');
             $table->string('cancer');
             $table->string('cancer_desc');
+            $table->string('cancer_f');
+            $table->string('cancer_f_desc');
             $table->string('outros');
             $table->string('outros_desc');
+            $table->string('outros_f');
+            $table->string('outros_f_desc');
             $table->string('mamografia');
             $table->string('preventivo');
             $table->date('data_mamografia');
@@ -84,7 +92,7 @@ return new class extends Migration
             $table->string('planejamento_implementacao_id');
             $table->longText('planejamento_desc');
             $table->longText('avaliacao');
-            $table->string('anexo_exame');
+            $table->string('anexo_termo');
             $table->string('anexo_outros');
             $table->timestamps();
         });

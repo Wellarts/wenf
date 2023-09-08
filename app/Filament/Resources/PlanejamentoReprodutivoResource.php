@@ -17,6 +17,7 @@ use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
+use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -39,11 +40,20 @@ class PlanejamentoReprodutivoResource extends Resource
         return $form
             ->schema([
                 Fieldset::make('Dados do Paciente')
+                    ->columns('7')
                     ->schema([
                         Forms\Components\Select::make('paciente_id')
+                            ->columnSpan('5')
+                            ->live()
+                            ->afterStateUpdated(function ($state, Set $set){
+                                $paciente = Paciente::find($state);
+                                $date =  Carbon::parse($paciente->data_nascimento);
+                                $idade = $date->diffInYears(Carbon::now());
+                                $set('idade',$idade);
+
+                            })
                             ->searchable()
                             ->relationship(name: 'paciente', titleAttribute: 'nome')
-                            //  ->options(Paciente::all()->pluck('nome', 'id'))
                             ->createOptionForm([
                                 Grid::make()
                                     ->schema([
@@ -99,29 +109,45 @@ class PlanejamentoReprodutivoResource extends Resource
                                             ->columnSpanFull(),
                                     ]),
                             ]),
+                        Forms\Components\TextInput::make('idade')
+                            ->disabled()
+                            ->label('Idade'),
                         Forms\Components\DatePicker::make('data_atendimento')
                             ->default(Carbon::now())
-                            ->label('Data do Atendimento')
-                            ->required(),
-                        Forms\Components\TextInput::make('peso')
-                            ->maxLength(255),
+                            ->label('Data do Atendimento'),
+                         Forms\Components\TextInput::make('peso')
+                            ->label('Peso (kg)')
+                            ->placeholder('00')
+                             ->numeric(),
                         Forms\Components\TextInput::make('altura')
-                            ->maxLength(255),
+                            ->label('Altura (m)')
+                            ->placeholder('0,00')
+                            //->mask('9,99')
+                            ->numeric()
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(function(Get $get, Set $set, $state) {
+                               $imc = (float)($get('peso') / ((float)($state * $state)));
+                               $imc = round($imc);
+                               $set('imc', $imc);
+                            }),
+
                         Forms\Components\TextInput::make('imc')
-                            ->label('IMC')
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('temp')
-                            ->label('Temperatura')
-                            ->maxLength(255),
+                            ->inputMode('decimal')
+                            ->label('IMC (Kg/m²)'),
                         Forms\Components\TextInput::make('pa')
-                            ->label('PA')
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('spo2')
-                            ->label('SPO2')
+                            ->label('PA (mmHg)')
                             ->maxLength(255),
                         Forms\Components\TextInput::make('fc')
-                            ->label('FC')
+                            ->label('FC (bpm)')
                             ->maxLength(255),
+                        Forms\Components\TextInput::make('temp')
+                            ->label('Temperatura (C)')
+                            ->maxLength(255),
+
+                        Forms\Components\TextInput::make('spo2')
+                            ->label('%SpO²')
+                            ->maxLength(255),
+
                     ]),
                 Fieldset::make('Levantamento')
                     ->schema([
@@ -132,7 +158,8 @@ class PlanejamentoReprodutivoResource extends Resource
                             ->label('Histórico da Doença')
                             ->columnSpanFull(),
                     ]),
-                Fieldset::make('Antecedentes Ginecológicos e Sexuais')
+                    Fieldset::make('Antecedentes Ginecológicos e Sexuais')
+                    ->columns('7')
                     ->schema([
                         Forms\Components\TextInput::make('menarca')
                             ->maxLength(255),
@@ -142,12 +169,14 @@ class PlanejamentoReprodutivoResource extends Resource
                             ->label('Ciclo Mestrual')
                             ->maxLength(255),
                         Forms\Components\radio::make('smp')
+                            ->inline()
                             ->options([
                                 '1' => 'Sim',
                                 '0' => 'Não',
                             ])
                             ->label('SPM'),
                         Forms\Components\TextInput::make('metodo_contraceptivo')
+                            ->columnSpan('2')
                             ->label('Método Contraceptivo')
                             ->maxLength(255),
                         Forms\Components\Radio::make('dispareunia')
@@ -162,10 +191,14 @@ class PlanejamentoReprodutivoResource extends Resource
                             ])
                             ->live(),
                         Forms\Components\TextInput::make('corrimento_desc')
+                            ->columnSpan('6')
                             ->hidden(fn (Get $get): bool => $get('corrimento') === null || $get('corrimento') === '0')
                             ->label('Descrição do Corrimento'),
+
+
                     ]),
-                Fieldset::make('Antecedentes Obstétricos')
+                    Fieldset::make('Antecedentes Obstétricos')
+                    ->columns('7')
                     ->schema([
                         Forms\Components\TextInput::make('gesta')
                             ->maxLength(255),
@@ -173,8 +206,17 @@ class PlanejamentoReprodutivoResource extends Resource
                             ->maxLength(255),
                         Forms\Components\TextInput::make('aborto')
                             ->maxLength(255),
+                        Forms\Components\DatePicker::make('primeiro_parto')
+                            ->label('Primeiro Parto'),
+                        Forms\Components\DatePicker::make('ultimo_parto')
+                            ->label('Último Parto'),
                         Forms\Components\Radio::make('gravidez_ectopica')
                             ->label('Gravidez Ectópica')
+                            ->options([
+                                '1' => 'Sim',
+                                '0' => 'Não',
+                            ]),
+                        Forms\Components\Radio::make('aleitamento')
                             ->options([
                                 '1' => 'Sim',
                                 '0' => 'Não',
@@ -188,12 +230,10 @@ class PlanejamentoReprodutivoResource extends Resource
                             ])
                             ->live(),
                         Forms\Components\TextInput::make('intercorrencias_desc')
+                            ->columnSpan('2')
                             ->hidden(fn (Get $get): bool => $get('intercorrencias') === null || $get('intercorrencias') === '0')
                             ->label('Descrição das Intercorrências'),
-                        Forms\Components\DatePicker::make('primeiro_parto')
-                            ->label('Primeiro Parto'),
-                        Forms\Components\DatePicker::make('ultimo_parto')
-                            ->label('Último Parto'),
+
                         Forms\Components\Radio::make('medicacao_uso')
                             ->options([
                                 '1' => 'Sim',
@@ -202,28 +242,10 @@ class PlanejamentoReprodutivoResource extends Resource
                             ->live()
                             ->label('Medicacao em Uso'),
                         Forms\Components\TextInput::make('medicacao_uso_desc')
+                            ->columnSpan('2')
                             ->hidden(fn (Get $get): bool => $get('medicacao_uso') === null || $get('medicacao_uso') === '0')
                             ->label('Descrição da Medicação em Uso'),
-                        Forms\Components\Radio::make('aleitamento')
-                            ->options([
-                                '1' => 'Sim',
-                                '0' => 'Não',
-                            ]),
-                        Forms\Components\Radio::make('tabagismo')
-                            ->options([
-                                '1' => 'Sim',
-                                '0' => 'Não',
-                            ]),
-                        Forms\Components\Radio::make('etilismo')
-                            ->options([
-                                '1' => 'Sim',
-                                '0' => 'Não',
-                            ]),
-                        Forms\Components\Radio::make('drogas')
-                            ->options([
-                                '1' => 'Sim',
-                                '0' => 'Não',
-                            ]),
+
                         Section::make('Outros Sintomas')
                             ->columns('2')
                             ->schema([
@@ -250,110 +272,136 @@ class PlanejamentoReprodutivoResource extends Resource
 
                             ]),
 
+
                     ]),
 
-                Fieldset::make('Antecedentes Pessoais e Familiar')
+                    Fieldset::make('Antecedentes Pessoais')
                     ->schema([
-                        Grid::make('4')
+                        Grid::make('6')
                             ->schema([
-                                Forms\Components\radio::make('cardiovasculares')
+                                Forms\Components\Checkbox::make('cardiovasculares')
                                     ->label('Cardiovasculares:')
-                                    ->options([
-                                        '0' => 'Não',
-                                        '1' => 'Pessoal',
-                                        '2' => 'Familiar',
-                                    ])
                                     ->live(),
                                 Forms\Components\TextInput::make('cardiovasculares_desc')
-                                    ->hidden(fn (Get $get): bool => $get('cardiovasculares') === null || $get('cardiovasculares') === '0')
-                                    ->label('Descrição do Cardiovascular'),
-                                Forms\Components\radio::make('endocrinas')
-                                    ->label('Endrocrinas:')
-                                    ->options([
-                                        '0' => 'Não',
-                                        '1' => 'Pessoal',
-                                        '2' => 'Familiar',
-                                    ])->live(),
+                                 //   ->columnSpan('1')
+                                 //   ->hidden(fn (Get $get): bool => ! $get('cardiovasculares'))
+                                    ->label(''),
+                                Forms\Components\Checkbox::make('endocrinas')
+                                    ->label('Endócrinos:')
+                                    ->live(),
                                 Forms\Components\TextInput::make('endocrinas_desc')
-                                    ->hidden(fn (Get $get): bool => $get('endocrinas') === null || $get('endocrinas') === '0')
-                                    ->label('Descrição das Endocrinas'),
-                                Forms\Components\radio::make('alergias')
+                                 //   ->columnSpan('1')
+                                 //   ->hidden(fn (Get $get): bool => ! $get('endocrinas') )
+                                    ->label(''),
+                                Forms\Components\Checkbox::make('alergias')
                                     ->label('Alergias:')
-                                    ->options([
-                                        '0' => 'Não',
-                                        '1' => 'Pessoal',
-                                        '2' => 'Familiar',
-                                    ])->live(),
+                                    ->live(),
                                 Forms\Components\TextInput::make('alergias_desc')
-                                    ->hidden(fn (Get $get): bool => $get('alergias') === null || $get('alergias') === '0')
-                                    ->label('Descrição das Alergias'),
-                                Forms\Components\radio::make('ist_s')
-                                    ->label('IST,S:')
-                                    ->options([
-                                        '0' => 'Não',
-                                        '1' => 'Pessoal',
-                                        '2' => 'Familiar',
-                                    ])->live(),
+                                //    ->columnSpan('1')
+                                //    ->hidden(fn (Get $get): bool => ! $get('alergias'))
+                                    ->label(''),
+                                Forms\Components\Checkbox::make('ist_s')
+                                    ->label('IST,s:')
+                                    ->live(),
                                 Forms\Components\TextInput::make('ist_s_desc')
-                                    ->hidden(fn (Get $get): bool => $get('ist_s') === null || $get('ist_s') === '0')
-                                    ->label('Descrição das IST,S'),
-                                Forms\Components\radio::make('cirurgias_transfusao')
+                                //    ->columnSpan('1')
+                                //    ->hidden(fn (Get $get): bool => ! $get('ist_s'))
+                                    ->label(''),
+                                Forms\Components\Checkbox::make('cirurgias_transfusao')
                                     ->label('Cirurgias/Transfusão:')
-                                    ->options([
-                                        '0' => 'Não',
-                                        '1' => 'Pessoal',
-                                        '2' => 'Familiar',
-                                    ])->live(),
+                                    ->live(),
                                 Forms\Components\TextInput::make('cirurgias_transfusao_desc')
-                                    ->hidden(fn (Get $get): bool => $get('cirurgias_transfusao') === null || $get('cirurgias_transfusao') === '0')
-                                    ->label('Descrição das Cirurgias e Transfusões'),
-                                Forms\Components\radio::make('cancer')
-                                    ->label('Cancer:')
-                                    ->options([
-                                        '0' => 'Não',
-                                        '1' => 'Pessoal',
-                                        '2' => 'Familiar',
-                                    ])->live(),
+                                 //   ->columnSpan('1')
+                                 //   ->hidden(fn (Get $get): bool => ! $get('cirurgias_transfusao'))
+                                   ->label(''),
+                                Forms\Components\Checkbox::make('cancer')
+                                    ->label('Câncer:')
+                                    ->live(),
                                 Forms\Components\TextInput::make('cancer_desc')
-                                    ->hidden(fn (Get $get): bool => $get('cancer') === null || $get('cancer') === '0')
-                                    ->label('Descrição do Cancer'),
-                                Forms\Components\radio::make('outros')
-                                    ->options([
-                                        '0' => 'Não',
-                                        '1' => 'Pessoal',
-                                        '2' => 'Familiar',
-                                    ])->live(),
+                                 //   ->columnSpan('1')
+                                //    ->hidden(fn (Get $get): bool => ! $get('cancer'))
+                                    ->label(''),
+
+                                    Forms\Components\Checkbox::make('drogas')
+                                        ->columnSpan('1'),
+                                    Forms\Components\Checkbox::make('etilismo')
+                                        ->columnSpan('1'),
+                                    Forms\Components\Checkbox::make('tabagismo')
+                                        ->columnSpan('1'),
+                                    Forms\Components\Checkbox::make('outros')
+                                    ->label('Outros')
+                                    ->live(),
                                 Forms\Components\TextInput::make('outros_desc')
-                                    ->hidden(fn (Get $get): bool => $get('outros') === null || $get('outros') === '0')
-                                    ->label('Descrição dos Outros'),
+                                    ->columnSpan('2')
+                                 //   ->hidden(fn (Get $get): bool => ! $get('outros'))
+                                    ->label(''),
+
+                            ]),
+
+                    ]),
+                    Fieldset::make('Antecedentes Familiares')
+                    ->schema([
+                        Grid::make('6')
+                            ->schema([
+                                Forms\Components\Checkbox::make('cardiovasculares_f')
+                                    ->label('Cardiovasculares:')
+                                    ->live(),
+                                Forms\Components\TextInput::make('cardiovasculares_f_desc')
+                                 //   ->columnSpan('1')
+                                 //   ->hidden(fn (Get $get): bool => ! $get('cardiovasculares'))
+                                    ->label(''),
+                                Forms\Components\Checkbox::make('endocrinas_f')
+                                    ->label('Endócrinos:')
+                                    ->live(),
+                                Forms\Components\TextInput::make('endocrinas_f_desc')
+                                 //   ->columnSpan('1')
+                                 //   ->hidden(fn (Get $get): bool => ! $get('endocrinas') )
+                                    ->label(''),
+
+                                Forms\Components\Checkbox::make('cancer_f')
+                                    ->label('Câncer:')
+                                    ->live(),
+                                Forms\Components\TextInput::make('cancer_f_desc')
+                                 //   ->columnSpan('1')
+                                //    ->hidden(fn (Get $get): bool => ! $get('cancer'))
+                                    ->label(''),
+
+                                    Forms\Components\Checkbox::make('outros_f')
+                                    ->label('Outros')
+                                    ->live(),
+                                Forms\Components\TextInput::make('outros_f_desc')
+                                    ->columnSpan('2')
+                                 //   ->hidden(fn (Get $get): bool => ! $get('outros'))
+                                    ->label(''),
 
                             ]),
 
                     ]),
                     Fieldset::make('Vacinas')
                     ->schema([
-                        Section::make('Antitetânica (dT)')
-                            ->columns('5')
+                        Section::make('Vacina Antitetânica (dT)')
+                            ->columns('6')
                             ->schema([
                                 Forms\Components\radio::make('vacina_dt')
                                     ->label('')
                                     ->options([
-                                        '0' => 'Sem informação de imunização',
-                                        '1' => 'Imunizada há menos de 5 anos',
-                                        '2' => 'Imunizada há mais de 5 anos',
-                                    ])->live(),
+                                        '0' => 'Não',
+                                        '1' => 'Sim',
+                                    ]),
+                                    //->live(),
                                 Forms\Components\DatePicker::make('vacina_dt_data_1')
-                                    ->hidden(fn (Get $get): bool => $get('vacina_dt') === null || $get('vacina_dt') === '0')
+                                  //  ->hidden(fn (Get $get): bool => $get('vacina_dt') === null || $get('vacina_dt') === '0')
                                     ->label('1º Dose'),
                                 Forms\Components\DatePicker::make('vacina_dt_data_2')
-                                    ->hidden(fn (Get $get): bool => $get('vacina_dt') === null || $get('vacina_dt') === '0')
+                                 //   ->hidden(fn (Get $get): bool => $get('vacina_dt') === null || $get('vacina_dt') === '0')
                                     ->label('2º Dose'),
                                 Forms\Components\DatePicker::make('vacina_dt_data_3')
-                                    ->hidden(fn (Get $get): bool => $get('vacina_dt') === null || $get('vacina_dt') === '0')
+                                  //  ->hidden(fn (Get $get): bool => $get('vacina_dt') === null || $get('vacina_dt') === '0')
                                     ->label('3º Dose'),
                                 Forms\Components\DatePicker::make('vacina_dt_reforco')
-                                    ->hidden(fn (Get $get): bool => $get('vacina_dt') === null || $get('vacina_dt') === '0')
+                                 //   ->hidden(fn (Get $get): bool => $get('vacina_dt') === null || $get('vacina_dt') === '0')
                                     ->label('Reforco'),
+
                             ]),
                         Section::make('Vacina HPV')
                             ->columns('3')
@@ -399,6 +447,7 @@ class PlanejamentoReprodutivoResource extends Resource
 
                     ]),
                 Fieldset::make('Histório de Exames Ginecológicos')
+                    ->columns('4')
                     ->schema([
                         Forms\Components\Checkbox::make('mamografia')
                             ->live(),

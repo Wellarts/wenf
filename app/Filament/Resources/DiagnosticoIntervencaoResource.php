@@ -31,14 +31,14 @@ class DiagnosticoIntervencaoResource extends Resource
                     ->label('Código -Descrição')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Radio::make('tipo')
+             /*   Forms\Components\Radio::make('tipo')
                     ->options([
                         '1' => 'Ginecológico',
                         '2' => 'Reprodutivo',
                         '3' => 'Perinatal',
                         '4' => 'Amamentação'
                     ])
-                    ->required()
+                    ->required() */
 
             ]);
     }
@@ -50,14 +50,14 @@ class DiagnosticoIntervencaoResource extends Resource
                 Tables\Columns\TextColumn::make('descricao')
                     ->label('Código - Descrição')
                     ->searchable(),
-                Tables\Columns\SelectColumn::make('tipo')
+             /*   Tables\Columns\SelectColumn::make('tipo')
                      ->options([
                         '1' => 'Ginecológico',
                         '2' => 'Reprodutivo',
                         '3' => 'Perinatal',
                         '4' => 'Amamentação'
                     ])
-                    ->disabled(),
+                    ->disabled(), */
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

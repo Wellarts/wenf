@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\PerinatalResource\Pages;
 use App\Models\Estado;
 use App\Models\Exame;
+use App\Models\Paciente;
 use App\Models\Perinatal;
 use Carbon\Carbon;
 use Filament\Forms;
@@ -17,6 +18,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
+use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -38,9 +40,19 @@ class PerinatalResource extends Resource
         return $form
             ->schema([
                 Fieldset::make('Dados do Paciente')
+                    ->columns('4')
                     ->schema([
                         Forms\Components\Select::make('paciente_id')
+                            ->columnSpan('2')
                             ->searchable()
+                            ->live()
+                            ->afterStateUpdated(function ($state, Set $set){
+                                $paciente = Paciente::find($state);
+                                $date =  Carbon::parse($paciente->data_nascimento);
+                                $idade = $date->diffInYears(Carbon::now());
+                                $set('idade',$idade);
+
+                            })
                             ->relationship(name: 'paciente', titleAttribute: 'nome')
                             ->createOptionForm([
                                 Grid::make()
@@ -48,10 +60,10 @@ class PerinatalResource extends Resource
                                         Forms\Components\TextInput::make('nome')
                                             ->required()
                                             ->maxLength(255),
-                                        Forms\Components\DatePicker::make('data_nascimento')
+                                       Forms\Components\DatePicker::make('data_nascimento')
                                             ->label('Data de Nascimento')
                                             ->required(),
-                                        Forms\Components\Textarea::make('endereco')
+                                    Forms\Components\Textarea::make('endereco')
                                             ->label('Endereço')
                                             ->required()
                                             ->columnSpanFull(),
@@ -97,13 +109,17 @@ class PerinatalResource extends Resource
                                             ->columnSpanFull(),
                                     ]),
                             ]),
+                        Forms\Components\TextInput::make('idade')
+                            ->disabled(),
                         Forms\Components\DatePicker::make('data')
                              ->default(Carbon::now())
-                            ->label('Data do Atendimento'),
+                            ->label('Data do Cadastro'),
                         Forms\Components\TextInput::make('peso')
                             ->maxLength(255),
                         Forms\Components\TextInput::make('altura')
-                            ->maxLength(255),
+                                ->placeholder('0,00')
+                                //->mask('9,99')
+                                ->numeric(),
                         Forms\Components\DatePicker::make('dum')
                             ->label('DUM'),
                         Forms\Components\DatePicker::make('dpp')
@@ -114,36 +130,15 @@ class PerinatalResource extends Resource
                     ]),
                 Fieldset::make('Gestações')
                     ->schema([
-                        Grid::make('4')
+                        Grid::make('6')
                             ->schema([
-                                Forms\Components\TextInput::make('parto')
-                                    ->numeric(),
-                                Forms\Components\TextInput::make('gravidez_planejada')
-                                    ->numeric()
-                                    ->label('Gravidez Planejada'),
-
-                                Forms\Components\Toggle::make('bebe_2500')
-                                    ->inline(false)
-                                    ->label('Bebê < 2.500g'),
-
-                                Forms\Components\Toggle::make('bebe_4500')
-                                    ->inline(false)
-                                    ->label('Bebê > 4.500g'),
-
-                                Forms\Components\Toggle::make('pre_eclampsia')
-                                    ->inline(false)
-                                    ->label('Pré-eclâmpsia'),
                                 Forms\Components\TextInput::make('gesta')
                                     ->numeric(),
-                                Forms\Components\Toggle::make('gesta_ectopia')
-                                    ->inline(false)
-                                    ->label('Gestação Ectópica'),
                                 Forms\Components\TextInput::make('abortos')
                                     ->numeric()
                                     ->maxLength(255),
-                                Forms\Components\Toggle::make('abortos_3')
-                                    ->inline(false)
-                                    ->label('3 ou + abortos'),
+                                Forms\Components\TextInput::make('parto')
+                                    ->numeric(),
                                 Forms\Components\TextInput::make('parto_vaginal')
                                     ->numeric()
                                     ->label('Parto Vaginal')
@@ -151,17 +146,20 @@ class PerinatalResource extends Resource
                                 Forms\Components\TextInput::make('cesarea')
                                     ->numeric()
                                     ->maxLength(255),
-                                Forms\Components\Toggle::make('cesarea_previa_2')
-                                    ->inline(false)
+                                Forms\Components\Radio::make('gravidez_planejada')
+                                     ->options([
+                                        '0' => 'Não',
+                                        '1' => 'Sim',
 
-                                    ->label('2 cesarea prévias'),
+                                    ])
+                                    ->label('Gravidez Planejada'),
                                 Forms\Components\TextInput::make('nascido_vivo')
                                     ->numeric()
                                     ->label('Nascidos Vivos')
                                     ->maxLength(255),
                                 Forms\Components\TextInput::make('nascido_vivo_vivem')
                                     ->numeric()
-                                    ->label('Nascido Vivo - Vivem')
+                                    ->label('Vivem')
                                     ->maxLength(255),
                                 Forms\Components\TextInput::make('nascido_morto')
                                     ->numeric()
@@ -181,30 +179,57 @@ class PerinatalResource extends Resource
                                         '0' => 'Não',
                                         '1' => 'Sim',
                                     ]),
+                                    Forms\Components\Toggle::make('abortos_3')
+                                    ->inline(false)
+                                    ->label('3 ou + abortos'),
+                                    Forms\Components\Toggle::make('bebe_2500')
+                                    ->inline(false)
+                                    ->label('Bebê < 2.500g'),
+
+                                Forms\Components\Toggle::make('bebe_4500')
+                                    ->inline(false)
+                                    ->label('Bebê > 4.500g'),
+
+                                Forms\Components\Toggle::make('pre_eclampsia')
+                                    ->inline(false)
+                                    ->label('Pré-eclâmpsia'),
+
+                                Forms\Components\Toggle::make('gesta_ectopia')
+                                    ->inline(false)
+                                    ->label('Gestação Ectópica'),
+
+
+
+                                Forms\Components\Toggle::make('cesarea_previa_2')
+                                    ->inline(false)
+                                    ->label('2 cesarea prévias'),
+
                                 Fieldset::make('Vacinas')
                                     ->schema([
                                         Section::make('Vacina Antitetânica (dT)')
-                                            ->columns('5')
+                                            ->columns('6')
                                             ->schema([
                                                 Forms\Components\radio::make('vacina_dt')
                                                     ->label('')
                                                     ->options([
-                                                        '0' => 'Sem informação de imunização',
-                                                        '1' => 'Imunizada há menos de 5 anos',
-                                                        '2' => 'Imunizada há mais de 5 anos',
-                                                    ])->live(),
+                                                        '0' => 'Não',
+                                                        '1' => 'Sim',
+                                                    ]),
+                                                    //->live(),
                                                 Forms\Components\DatePicker::make('vacina_dt_data_1')
-                                                    ->hidden(fn (Get $get): bool => $get('vacina_dt') === null || $get('vacina_dt') === '0')
+                                                  //  ->hidden(fn (Get $get): bool => $get('vacina_dt') === null || $get('vacina_dt') === '0')
                                                     ->label('1º Dose'),
                                                 Forms\Components\DatePicker::make('vacina_dt_data_2')
-                                                    ->hidden(fn (Get $get): bool => $get('vacina_dt') === null || $get('vacina_dt') === '0')
+                                                 //   ->hidden(fn (Get $get): bool => $get('vacina_dt') === null || $get('vacina_dt') === '0')
                                                     ->label('2º Dose'),
                                                 Forms\Components\DatePicker::make('vacina_dt_data_3')
-                                                    ->hidden(fn (Get $get): bool => $get('vacina_dt') === null || $get('vacina_dt') === '0')
+                                                  //  ->hidden(fn (Get $get): bool => $get('vacina_dt') === null || $get('vacina_dt') === '0')
                                                     ->label('3º Dose'),
                                                 Forms\Components\DatePicker::make('vacina_dt_reforco')
-                                                    ->hidden(fn (Get $get): bool => $get('vacina_dt') === null || $get('vacina_dt') === '0')
+                                                 //   ->hidden(fn (Get $get): bool => $get('vacina_dt') === null || $get('vacina_dt') === '0')
                                                     ->label('Reforco'),
+                                                 Forms\Components\DatePicker::make('vacina_dtpa')
+                                                    ->label('dTpa'),
                                             ]),
                                         Section::make('Vacina HPV')
                                             ->columns('3')
@@ -257,20 +282,6 @@ class PerinatalResource extends Resource
                                                     ->hidden(fn (Get $get): bool => $get('vacina_influenza') === null || $get('vacina_influenza') === '0')
                                                     ->label('Data'),
                                             ]),
-                                        Section::make('Vacina Influenza')
-                                            ->columns('2')
-                                            ->schema([
-                                                Forms\Components\radio::make('vacina_dtpa')
-                                                    ->label('')
-                                                    ->options([
-                                                        '0' => 'Não',
-                                                        '1' => 'Sim',
-
-                                                    ])->live(),
-                                                Forms\Components\DatePicker::make('vacina_dtpa_data')
-                                                    ->hidden(fn (Get $get): bool => $get('vacina_dtpa') === null || $get('vacina_dtpa') === '0')
-                                                    ->label('Data'),
-                                            ]),
 
                                     ]),
                                 Fieldset::make('Exames')
@@ -296,11 +307,9 @@ class PerinatalResource extends Resource
                                         Repeater::make('ultrassons')
                                             ->label('')
                                             ->schema([
-                                                Grid::make(7)
+                                                Grid::make(6)
                                                     ->schema([
                                                         DatePicker::make('data'),
-                                                        TextInput::make('ig_dum')
-                                                            ->label('IG DUM'),
                                                         TextInput::make('ig_usg')
                                                             ->label('IG USG'),
                                                         TextInput::make('peso_fetal')
@@ -309,8 +318,11 @@ class PerinatalResource extends Resource
                                                             ->label('Placeta'),
                                                         TextInput::make('liquido')
                                                             ->label('Líquido'),
-                                                        TextInput::make('outros')
-                                                            ->label('Outros'),
+                                                        TextInput::make('bcf')
+                                                            ->label('BCF'),
+                                                        TextInput::make('conclusao')
+                                                            ->columnSpanFull()
+                                                            ->label('Conclusão'),
                                                     ])
                                             ])->columnSpanFull(),
                                     ]),
@@ -340,20 +352,32 @@ class PerinatalResource extends Resource
                                                        DatePicker::make('data')
                                                             ->label('Data'),
                                                         TextInput::make('queixas')
-                                                            ->columnSpan('2')
+                                                           // ->columnSpan('2')
                                                             ->label('Queixas'),
                                                         TextInput::make('ig_dum_usg')
                                                             ->label('IG DUM/USG'),
-                                                        TextInput::make('peso_imc')
-                                                            ->label('Peso (kg) / IMC'),
-                                                        TextInput::make('edema')
-                                                            ->label('Edema'),
+                                                        TextInput::make('peso_consulta')
+                                                            ->label('Peso (kg)')
+                                                            ->live(onBlur: true)
+                                                            ->afterStateUpdated(function(Get $get, Set $set, $state) {
+                                                                   $imc = (float)($state) / ((float)($get('../../altura') * $get('../../altura')));
+                                                                    $imc = round($imc);
+                                                                    $set('imc', $imc);
+                                                            }),
+                                                        TextInput::make('imc')
+                                                            ->hint('Calculado quando alterar o peso')
+                                                            ->readOnly()
+                                                            ->label('IMC'),
                                                         TextInput::make('pressao')
                                                             ->label('Pressão Arterial (mmHG)'),
                                                         TextInput::make('altura_ulterina')
                                                             ->label('Altura Uterina (cm)'),
                                                         TextInput::make('apresentacao_fetal')
                                                             ->label('Apresentação Fetal'),
+                                                        TextInput::make('bcf_mov_fetal')
+                                                            ->label('BCF/Mov.Fetal'),
+                                                        TextInput::make('edema')
+                                                            ->label('Edema'),
                                                         TextInput::make('evolucao')
                                                             ->label('Evolução')
                                                             ->columnSpanFull(),

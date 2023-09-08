@@ -1,0 +1,1 @@
+php artisan migrate:refresh --path=/database/migrations/2023_08_25_143122_create_planejamento_ginecologicos_table.php
