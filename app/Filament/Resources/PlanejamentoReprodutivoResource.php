@@ -43,7 +43,10 @@ class PlanejamentoReprodutivoResource extends Resource
                     ->columns('7')
                     ->schema([
                         Forms\Components\Select::make('paciente_id')
-                            ->columnSpan('5')
+                            ->columnSpan([
+                                'xl' => 3,
+                                '2xl' => 3,
+                                ])
                             ->live()
                             ->afterStateUpdated(function ($state, Set $set){
                                 $paciente = Paciente::find($state);
@@ -176,7 +179,10 @@ class PlanejamentoReprodutivoResource extends Resource
                             ])
                             ->label('SPM'),
                         Forms\Components\TextInput::make('metodo_contraceptivo')
-                            ->columnSpan('2')
+                        ->columnSpan([
+                            'xl' => 2,
+                            '2xl' => 2,
+                        ])
                             ->label('Método Contraceptivo')
                             ->maxLength(255),
                         Forms\Components\Radio::make('dispareunia')
@@ -191,7 +197,10 @@ class PlanejamentoReprodutivoResource extends Resource
                             ])
                             ->live(),
                         Forms\Components\TextInput::make('corrimento_desc')
-                            ->columnSpan('6')
+                        ->columnSpan([
+                            'xl' => 6,
+                            '2xl' => 6,
+                        ])
                             ->hidden(fn (Get $get): bool => $get('corrimento') === null || $get('corrimento') === '0')
                             ->label('Descrição do Corrimento'),
 
@@ -230,7 +239,10 @@ class PlanejamentoReprodutivoResource extends Resource
                             ])
                             ->live(),
                         Forms\Components\TextInput::make('intercorrencias_desc')
-                            ->columnSpan('2')
+                        ->columnSpan([
+                            'xl' => 2,
+                            '2xl' => 2,
+                        ])
                             ->hidden(fn (Get $get): bool => $get('intercorrencias') === null || $get('intercorrencias') === '0')
                             ->label('Descrição das Intercorrências'),
 
@@ -242,7 +254,10 @@ class PlanejamentoReprodutivoResource extends Resource
                             ->live()
                             ->label('Medicacao em Uso'),
                         Forms\Components\TextInput::make('medicacao_uso_desc')
-                            ->columnSpan('2')
+                        ->columnSpan([
+                            'xl' => 2,
+                            '2xl' => 2,
+                        ])
                             ->hidden(fn (Get $get): bool => $get('medicacao_uso') === null || $get('medicacao_uso') === '0')
                             ->label('Descrição da Medicação em Uso'),
 
@@ -322,17 +337,20 @@ class PlanejamentoReprodutivoResource extends Resource
                                 //    ->hidden(fn (Get $get): bool => ! $get('cancer'))
                                     ->label(''),
 
-                                    Forms\Components\Checkbox::make('drogas')
-                                        ->columnSpan('1'),
-                                    Forms\Components\Checkbox::make('etilismo')
-                                        ->columnSpan('1'),
-                                    Forms\Components\Checkbox::make('tabagismo')
-                                        ->columnSpan('1'),
+                                    Forms\Components\Checkbox::make('drogas'),
+
+                                    Forms\Components\Checkbox::make('etilismo'),
+
+                                    Forms\Components\Checkbox::make('tabagismo'),
+
                                     Forms\Components\Checkbox::make('outros')
                                     ->label('Outros')
                                     ->live(),
                                 Forms\Components\TextInput::make('outros_desc')
-                                    ->columnSpan('2')
+                                ->columnSpan([
+                                    'xl' => 2,
+                                    '2xl' => 2,
+                                ])
                                  //   ->hidden(fn (Get $get): bool => ! $get('outros'))
                                     ->label(''),
 
@@ -370,7 +388,10 @@ class PlanejamentoReprodutivoResource extends Resource
                                     ->label('Outros')
                                     ->live(),
                                 Forms\Components\TextInput::make('outros_f_desc')
-                                    ->columnSpan('2')
+                                ->columnSpan([
+                                    'xl' => 2,
+                                    '2xl' => 2,
+                                ])
                                  //   ->hidden(fn (Get $get): bool => ! $get('outros'))
                                     ->label(''),
 

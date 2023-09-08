@@ -40,8 +40,18 @@ class PerinatalResource extends Resource
         return $form
             ->schema([
                 Fieldset::make('Dados do Paciente')
-                    ->columns('4')
                     ->schema([
+                        Grid::make([
+                            'default' => 2,
+                            'sm' => 2,
+                            'md' => 3,
+                            'lg' => 4,
+                            'xl' => 4,
+                            '2xl' => 4,
+                        ])
+                            ->schema([
+
+
                         Forms\Components\Select::make('paciente_id')
                             ->columnSpan('2')
                             ->searchable()
@@ -121,12 +131,12 @@ class PerinatalResource extends Resource
                                 //->mask('9,99')
                                 ->numeric(),
                         Forms\Components\DatePicker::make('dum')
-                            ->label('DUM'),
+                             ->label('DUM'),
                         Forms\Components\DatePicker::make('dpp')
-                            ->label('DPP'),
+                             ->label('DPP'),
                         Forms\Components\DatePicker::make('dpp_eco')
                             ->label('DPP eco'),
-
+                            ])
                     ]),
                 Fieldset::make('Gestações')
                     ->schema([

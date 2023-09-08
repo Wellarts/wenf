@@ -40,10 +40,12 @@ class PlanejamentoGinecologicoResource extends Resource
         return $form
             ->schema([
                 Fieldset::make('Dados do Paciente')
-                    ->columns('7')
+                   ->columns('7')
                     ->schema([
                         Forms\Components\Select::make('paciente_id')
-                            ->columnSpan('5')
+                            ->columnSpan([
+                                'xl' => 3,
+                                '2xl' => 3,])
                             ->searchable()
                             ->live()
                             ->afterStateUpdated(function ($state, Set $set){
@@ -177,7 +179,10 @@ class PlanejamentoGinecologicoResource extends Resource
                             ])
                             ->label('SPM'),
                         Forms\Components\TextInput::make('metodo_contraceptivo')
-                            ->columnSpan('2')
+                            ->columnSpan([
+                                'xl' => 2,
+                                '2xl' => 2,
+                            ])
                             ->label('Método Contraceptivo')
                             ->maxLength(255),
                         Forms\Components\Radio::make('dispareunia')
@@ -192,7 +197,10 @@ class PlanejamentoGinecologicoResource extends Resource
                             ])
                             ->live(),
                         Forms\Components\TextInput::make('corrimento_desc')
-                            ->columnSpan('6')
+                            ->columnSpan([
+                                'xl' => 6,
+                                '2xl' => 6,
+                            ])
                             ->hidden(fn (Get $get): bool => $get('corrimento') === null || $get('corrimento') === '0')
                             ->label('Descrição do Corrimento'),
 
@@ -231,7 +239,10 @@ class PlanejamentoGinecologicoResource extends Resource
                             ])
                             ->live(),
                         Forms\Components\TextInput::make('intercorrencias_desc')
-                            ->columnSpan('2')
+                            ->columnSpan([
+                                'xl' => 2,
+                                '2xl' => 2,
+                            ])
                             ->hidden(fn (Get $get): bool => $get('intercorrencias') === null || $get('intercorrencias') === '0')
                             ->label('Descrição das Intercorrências'),
 
@@ -243,12 +254,18 @@ class PlanejamentoGinecologicoResource extends Resource
                             ->live()
                             ->label('Medicacao em Uso'),
                         Forms\Components\TextInput::make('medicacao_uso_desc')
-                            ->columnSpan('2')
+                        ->columnSpan([
+                            'xl' => 2,
+                            '2xl' => 2,
+                        ])
                             ->hidden(fn (Get $get): bool => $get('medicacao_uso') === null || $get('medicacao_uso') === '0')
                             ->label('Descrição da Medicação em Uso'),
 
                         Section::make('Outros Sintomas')
-                            ->columns('2')
+                        ->columnSpan([
+                            'xl' => 2,
+                            '2xl' => 2,
+                        ])
                             ->schema([
                                 Forms\Components\Radio::make('sintomas_urinario')
                                     ->options([
@@ -333,15 +350,12 @@ class PlanejamentoGinecologicoResource extends Resource
                                     ->label('Outros')
                                     ->live(),
                                 Forms\Components\TextInput::make('outros_desc')
-                                    ->columnSpan('2')
+                                    ->columnSpan([
+                                    'xl' => 2,
+                                    '2xl' => 2,
+                                ])
                                  //   ->hidden(fn (Get $get): bool => ! $get('outros'))
                                     ->label(''),
-
-
-
-
-
-
 
                             ]),
 
@@ -373,17 +387,15 @@ class PlanejamentoGinecologicoResource extends Resource
                                 //    ->hidden(fn (Get $get): bool => ! $get('cancer'))
                                     ->label(''),
 
-                                    Forms\Components\Checkbox::make('drogas')
-                                        ->columnSpan('1'),
-                                    Forms\Components\Checkbox::make('etilismo')
-                                        ->columnSpan('1'),
-                                    Forms\Components\Checkbox::make('tabagismo')
-                                        ->columnSpan('1'),
+
                                     Forms\Components\Checkbox::make('outros_f')
                                     ->label('Outros')
                                     ->live(),
                                 Forms\Components\TextInput::make('outros_f_desc')
-                                    ->columnSpan('2')
+                                    ->columnSpan([
+                                        'xl' => 2,
+                                        '2xl' => 2,
+                                    ])
                                  //   ->hidden(fn (Get $get): bool => ! $get('outros'))
                                     ->label(''),
 
@@ -489,21 +501,27 @@ class PlanejamentoGinecologicoResource extends Resource
                 Fieldset::make('Avaliação Especular')
                     ->columns('3')
                     ->schema([
-                        Section::make('Vulva')
-                            ->columns('3')
+                        Section::make()
+                        ->columnSpan([
+                            'xl' => 3,
+                            '2xl' => 3,
+                        ])
                             ->schema([
                                 Forms\Components\Radio::make('vulva')
                                      ->options([
                                         '0' => 'Fisiológico',
                                         '1' => 'Patológico',
                                     ])
-                                    ->label('')
+                                    ->label('Vulva')
                                     ->live(),
                                 Forms\Components\TextInput::make('vulva_desc')
-                                    ->columnSpan('2')
+                                ->columnSpan([
+                                    'xl' => 2,
+                                    '2xl' => 2,
+                                ])
                                     ->hidden(fn (Get $get): bool => $get('vulva') === null || $get('vulva') === '0')
                                     ->label('Descrição da Vulva'),
-                            ]),
+
 
 
                         Forms\Components\TextInput::make('vagina')
@@ -513,10 +531,14 @@ class PlanejamentoGinecologicoResource extends Resource
                         Forms\Components\TextInput::make('muco')
                             ->label('Muco'),
                         FileUpload::make('anexo_2')
-                            ->columnSpan('3')
+                        ->columnSpan([
+                            'xl' => 3,
+                            '2xl' => 3,
+                        ])
                             ->label('Anexo da Avaliação Especular')
                             ->image()
                             ->imageEditor()
+                        ]),
                     ]),
 
                 Fieldset::make('Diagnósticos e Avaliações')
