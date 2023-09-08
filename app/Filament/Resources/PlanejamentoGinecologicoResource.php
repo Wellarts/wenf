@@ -110,6 +110,7 @@ class PlanejamentoGinecologicoResource extends Resource
                                     ]),
                             ]),
                         Forms\Components\TextInput::make('idade')
+                            ->disabled()
                             ->label('Idade'),
 
                         Forms\Components\DatePicker::make('data_atendimento')
