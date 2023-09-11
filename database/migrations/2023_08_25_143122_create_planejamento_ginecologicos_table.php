@@ -101,6 +101,7 @@ return new class extends Migration
             $table->longText('avaliacao',200);
             $table->string('anexo_exame',200);
             $table->string('anexo_outros',200);
+            $table->string('status',10);
             $table->timestamps();
         });
     }

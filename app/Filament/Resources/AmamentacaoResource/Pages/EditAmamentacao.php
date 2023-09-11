@@ -12,6 +12,8 @@ class EditAmamentacao extends EditRecord
 {
     protected static string $resource = AmamentacaoResource::class;
 
+    protected static ?string $title = 'Editar Consultoria em Amamentação';
+
     protected function getHeaderActions(): array
     {
         return [

@@ -56,6 +56,7 @@ return new class extends Migration
             $table->json('exames');
             $table->json('ultrassons');
             $table->json('acompanhamentos');
+            $table->string('status', 10);
             $table->timestamps();
         });
     }

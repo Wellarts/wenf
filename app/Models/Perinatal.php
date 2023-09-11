@@ -53,6 +53,7 @@ class Perinatal extends Model
         'exames',
         'ultrassons',
         'acompanhamentos',
+        'status',
     ];
 
     protected $casts = [

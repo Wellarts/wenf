@@ -99,6 +99,7 @@ class PlanejamentoGinecologico extends Model
         'avaliacao',
         'anexo_exame',
         'anexo_outros',
+        'status',
     ];
 
       protected $casts = [

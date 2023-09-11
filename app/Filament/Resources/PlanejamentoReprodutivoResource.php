@@ -507,7 +507,9 @@ class PlanejamentoReprodutivoResource extends Resource
                         FileUpload::make('anexo_outros')
                             ->multiple()
                             ->label('Outros Anexos')
-                            ->downloadable()
+                            ->downloadable(),
+                    Forms\Components\Toggle::make('status')
+                            ->label('Finalizar Atendimento'),
                     ])
             ]);
     }
@@ -526,6 +528,10 @@ class PlanejamentoReprodutivoResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('queixa_principal')
                     ->label('Queixa Principal'),
+                Tables\Columns\IconColumn::make('status')
+                    ->label('Finalizado')
+                    ->alignCenter()
+                    ->boolean(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

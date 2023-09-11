@@ -391,8 +391,12 @@ class PerinatalResource extends Resource
                                                         TextInput::make('evolucao')
                                                             ->label('Evolução')
                                                             ->columnSpanFull(),
-                                                    ])
+                                                    
+                                                        ]),
+                                               
                                             ])->columnSpanFull(),
+                                        Forms\Components\Toggle::make('status')
+                                            ->label('Finalizar Atendimento'),
                                     ])
 
 
@@ -417,7 +421,10 @@ class PerinatalResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('altura')
                     ->searchable(),
-
+                Tables\Columns\IconColumn::make('status')
+                    ->label('Finalizado')
+                    ->alignCenter()
+                    ->boolean(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

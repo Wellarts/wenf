@@ -92,6 +92,7 @@ class PlanejamentoReprodutivo extends Model
         'avaliacao',
         'anexo_termo',
         'anexo_outros',
+        'status',
     ];
 
     protected $casts = [

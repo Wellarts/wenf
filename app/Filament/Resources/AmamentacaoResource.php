@@ -348,16 +348,12 @@ class AmamentacaoResource extends Resource
                 Fieldset::make('Avaliação do Bebê')
                     ->columns('5')
                     ->schema([
+                       
                         Forms\Components\TextInput::make('ig')
                             ->label('IG')
                             ->required(false)
                             ->maxLength(50),
-                        Forms\Components\Radio::make('sexo')
-                            ->options([
-                                '1' => 'Masculino',
-                                '2' => 'Feminino',
-                            ])
-                            ->required(false),
+                       
                         Forms\Components\TextInput::make('apgar_1_mim')
                             ->label('APGAR: 1º mim')
                             ->required(false)
@@ -375,6 +371,12 @@ class AmamentacaoResource extends Resource
                             ->label('Peso Atual')
                             ->required(false)
                             ->maxLength(50),
+                        Forms\Components\Radio::make('sexo')
+                            ->options([
+                                '1' => 'Masculino',
+                                '2' => 'Feminino',
+                            ])
+                            ->required(false),
                         Forms\Components\Radio::make('padrao_motor')
                             ->label('Padrão Motor')
                             ->options([
@@ -385,12 +387,12 @@ class AmamentacaoResource extends Resource
 
                         Forms\Components\Radio::make('conciencia')
                             ->label('Estado de Conciência')
-                            ->inlineLabel(false)
-                            ->columnSpan([
+                          //  ->inlineLabel(false)
+                          /*  ->columnSpan([
                                 'xl' => 3,
                                 '2xl' => 3,
                             ])
-                            ->inline()
+                            ->inline() */
                             ->options([
                                 '1' => 'Sono Profundo',
                                 '2' => 'Sono Leve',
@@ -400,14 +402,18 @@ class AmamentacaoResource extends Resource
 
                             ])
                             ->required(false),
-                        Forms\Components\Toggle::make('refluxo')
+                        Forms\Components\Radio::make('refluxo')
                             ->label('Presença de Refluxo')
+                            ->options([
+                                '1' => 'Sim',
+                                '0' => 'Não',
+                           ])
                             ->live()
                             ->required(false),
 
                         Forms\Components\TextInput::make('refluxo_vezes')
                             ->label('Refluxo - Quantas Vezes')
-                            ->hidden(fn (Get $get): bool => !$get('refluxo'))
+                            ->hidden(fn (Get $get): bool => $get('refluxo') === null || $get('refluxo') === '0')
                             ->required(false)
                             ->maxLength(50),
                         Fieldset::make('Eliminações')
@@ -454,10 +460,7 @@ class AmamentacaoResource extends Resource
                                     ->hidden(fn (Get $get): bool => $get('reflexos') === null || $get('reflexos') === '0')
                                     ->required(false)
                                     ->maxLength(50),
-                                Forms\Components\TextInput::make('padrao_succao')
-                                    ->label('Padrão Sucção')
-                                    ->required(false)
-                                    ->maxLength(50),
+                                
                                 Forms\Components\Radio::make('uso_bicos')
                                     ->label('Uso de Bicos')
                                     ->live()
@@ -485,6 +488,14 @@ class AmamentacaoResource extends Resource
                                     ->hidden(fn (Get $get): bool => $get('formula_infaltil') === null || $get('formula_infaltil') === '0')
                                     ->required(false)
                                     ->maxLength(255),
+                                Forms\Components\TextInput::make('padrao_succao')
+                                    ->columnSpan([
+                                        'xl' => 2,
+                                        '2xl' => 2,
+                                    ])
+                                    ->label('Padrão Sucção')
+                                    ->required(false)
+                                    ->maxLength(50),
                             ]),
                         Fieldset::make('Diagnósticos e Avaliações')
                             ->schema([
@@ -505,7 +516,7 @@ class AmamentacaoResource extends Resource
                                     ->label('Avaliação/Retorno')
                                     ->columnSpanFull(),
                                 Forms\Components\Toggle::make('status')
-                                    ->label('Atendimento Finalizado'),
+                                    ->label('Finalizar Atendimento'),
 
 
 
@@ -530,7 +541,7 @@ class AmamentacaoResource extends Resource
                     ->date()
                     ->sortable(),
                 Tables\Columns\IconColumn::make('status')
-                    ->label('Finalizados')
+                    ->label('Finalizado')
                     ->alignCenter()
                     ->boolean(),
                 Tables\Columns\TextColumn::make('created_at')

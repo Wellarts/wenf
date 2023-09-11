@@ -94,6 +94,7 @@ return new class extends Migration
             $table->longText('avaliacao');
             $table->string('anexo_termo');
             $table->string('anexo_outros');
+            $table->string('status',10);
             $table->timestamps();
         });
     }
