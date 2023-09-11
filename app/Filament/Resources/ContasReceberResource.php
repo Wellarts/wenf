@@ -26,7 +26,7 @@ class ContasReceberResource extends Resource
 {
     protected static ?string $model = ContasReceber::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-calculator';
 
     protected static ?string $title = 'Contas a Receber';
 

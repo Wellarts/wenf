@@ -17,7 +17,7 @@ class FluxoCaixaResource extends Resource
 {
     protected static ?string $model = FluxoCaixa::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-chart-pie';
 
     protected static ?string $navigationLabel = 'Fluxo de Caixa';
 

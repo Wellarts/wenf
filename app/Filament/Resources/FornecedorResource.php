@@ -21,7 +21,7 @@ class FornecedorResource extends Resource
 
     protected static ?string $navigationGroup = 'Cadastros';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-users';
 
     protected static ?string $navigationLabel = 'Fornecedores';
 

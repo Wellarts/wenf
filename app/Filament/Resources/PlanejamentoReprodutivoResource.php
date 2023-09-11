@@ -28,11 +28,13 @@ class PlanejamentoReprodutivoResource extends Resource
 {
     protected static ?string $model = PlanejamentoReprodutivo::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-pencil-square';
 
     protected static ?string $navigationGroup = 'Atendimentos';
 
     protected static ?string $navigationLabel = 'Planejamentos Reprodutivos';
+
+    protected static ?int $navigationSort = 2;
 
 
     public static function form(Form $form): Form

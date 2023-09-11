@@ -29,12 +29,13 @@ class PlanejamentoGinecologicoResource extends Resource
 {
     protected static ?string $model = PlanejamentoGinecologico::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-pencil-square';
 
     protected static ?string $navigationGroup = 'Atendimentos';
 
     protected static ?string $navigationLabel = 'Planejamentos Ginecológicos';
 
+    
     public static function form(Form $form): Form
     {
         return $form

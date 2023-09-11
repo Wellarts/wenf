@@ -25,7 +25,7 @@ class ContasPagarResource extends Resource
 {
     protected static ?string $model = ContasPagar::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-calculator';
 
     protected static ?string $title = 'Contas a Pagar';
 

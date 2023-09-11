@@ -17,7 +17,7 @@ class PlanejamentoImplementacaoResource extends Resource
 {
     protected static ?string $model = PlanejamentoImplementacao::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-arrow-left-on-rectangle';
 
     protected static ?string $navigationGroup = 'Cadastros';
 
