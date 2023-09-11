@@ -1,0 +1,1 @@
+<img src="{{ asset('/images/logo_nome.png') }}" alt="Logo" class="h-10">
