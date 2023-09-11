@@ -45,4 +45,8 @@ class Paciente extends Model
         return $this->hasMany(ContasReceber::class);
     }
 
+    public function Amamentacao() {
+        return $this->hasMany(Amamentacao::class);
+    }
+
 }
