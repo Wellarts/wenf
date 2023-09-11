@@ -37,6 +37,9 @@ class ReceituarioResource extends Resource
                     ->label('Data do Atendimento')
                     ->required(),
                     MarkdownEditor::make('descricao')
+                    ->disableToolbarButtons([
+                        'attachFiles',
+                    ])
                     ->label('Descrição')
                     ->required()
                     ->columnSpanFull(),

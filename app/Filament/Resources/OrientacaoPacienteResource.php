@@ -40,6 +40,9 @@ class OrientacaoPacienteResource extends Resource
                     ->required(),
                 MarkdownEditor::make('descricao')
                     ->label('Descrição')
+                    ->disableToolbarButtons([
+                        'attachFiles',
+                    ])
                     ->required()
                     ->columnSpanFull(),
             ]);
