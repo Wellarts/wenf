@@ -154,6 +154,7 @@ class PerinatalResource extends Resource
                                     ->label('Parto Vaginal')
                                     ->maxLength(255),
                                 Forms\Components\TextInput::make('cesarea')
+                                    ->label('Cesárea')
                                     ->numeric()
                                     ->maxLength(255),
                                 Forms\Components\Radio::make('gravidez_planejada')
@@ -368,6 +369,7 @@ class PerinatalResource extends Resource
                                                             ->label('IG DUM/USG'),
                                                         TextInput::make('peso_consulta')
                                                             ->label('Peso (kg)')
+                                                            ->numeric()
                                                             ->live(onBlur: true)
                                                             ->afterStateUpdated(function(Get $get, Set $set, $state) {
                                                                    $imc = (float)($state) / ((float)($get('../../altura') * $get('../../altura')));

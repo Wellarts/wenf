@@ -263,8 +263,8 @@ class PlanejamentoGinecologicoResource extends Resource
 
                         Section::make('Outros Sintomas')
                         ->columnSpan([
-                            'xl' => 2,
-                            '2xl' => 2,
+                            'xl' => 7,
+                            '2xl' => 7,
                         ])
                             ->schema([
                                 Forms\Components\Radio::make('sintomas_urinario')
