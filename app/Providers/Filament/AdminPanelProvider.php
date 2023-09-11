@@ -2,7 +2,9 @@
 
 namespace App\Providers\Filament;
 
+use App\Livewire\AtendimentoAmamentacao;
 use App\Livewire\AtendimentoGinecologico;
+use App\Livewire\AtendimentoPrenatal;
 use App\Livewire\AtendimentoReprodutivo;
 use App\Livewire\ListaAgendamentos;
 use Filament\Http\Middleware\Authenticate;
@@ -48,6 +50,8 @@ class AdminPanelProvider extends PanelProvider
                 ListaAgendamentos::class,
                 AtendimentoGinecologico::class,
                 AtendimentoReprodutivo::class,
+                AtendimentoPrenatal::class,
+                AtendimentoAmamentacao::class,
             ])
             ->middleware([
                 EncryptCookies::class,
