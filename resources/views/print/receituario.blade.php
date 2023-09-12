@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap demo</title>
+    <title>Receituário</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
 </head>
@@ -14,11 +14,12 @@
     <div class="container">
         <table class="table">
             <tr>
-                <td>
-                    <h1>LOGO</h1>
+                <td style="width: 10%">
+                    <img src="{{ asset('/images/logo.png') }}" alt="Logo"  style="width: 3cm">
                 </td>
-                <td>
-                    <p>Clínica Mamma Baby <br>
+                
+                <td style="width: 90%">
+                    <p style="text-align: center; font-size: 12pt; color: darkgray"><b>Clínica Mamma Baby</b> <br>
                         Avenida 19 de Maio, 426 - Centro - Lajedo-PE<br>
                         (87)9.9904-9226 @mamm_ababy
                     </p>
@@ -26,7 +27,7 @@
             </tr>
         </table>
         <div>
-            <p class="text-center fs-3">RECEITUÁRIO</p>
+            <p class="text-center fs-5">RECEITUÁRIO</p>
         </div>
         <table class="table table-striped-columns">
             <tr>

@@ -86,6 +86,7 @@ class PlanejamentoReprodutivo extends Model
         'preventivo',
         'data_mamografia',
         'data_preventivo',
+        'evolucao',
         'diagnostico_intervencao_id',
         'planejamento_implementacao_id',
         'planejamento_desc',

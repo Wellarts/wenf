@@ -32,13 +32,14 @@ class AgendarAtendimentoResource extends Resource
                     ->maxLength(255),
                 Forms\Components\DatePicker::make('data_atendimento')
                     ->label('Data do Atendimento')
-                    ->required(),
+                    ->required(false),
                 Forms\Components\TimePicker::make('hora_atendimento')
+                    ->seconds(false)
                     ->label('Hora do Atendimento')
-                    ->required(),
+                    ->required(false),
                 Forms\Components\Textarea::make('descricao')
                     ->label('Descrição')
-                    ->required()
+                    ->required(false)
                     ->columnSpanFull(),
                 Forms\Components\Toggle::make('status')
                     ->label('Atendimento Realizado')

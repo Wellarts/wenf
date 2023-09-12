@@ -9,4 +9,9 @@ use Filament\Resources\Pages\CreateRecord;
 class CreatePlanejamentoGinecologico extends CreateRecord
 {
     protected static string $resource = PlanejamentoGinecologicoResource::class;
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

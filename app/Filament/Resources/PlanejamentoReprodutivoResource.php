@@ -11,6 +11,7 @@ use App\Models\PlanejamentoImplementacao;
 use App\Models\PlanejamentoReprodutivo;
 use Carbon\Carbon;
 use Filament\Forms;
+use Filament\Forms\Components\Component;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Grid;
@@ -483,6 +484,12 @@ class PlanejamentoReprodutivoResource extends Resource
                             ->hidden(fn (Get $get): bool => !$get('preventivo'))
                             ->label('Data do Preventivo'),
                     ]),
+                Fieldset::make('Evolução')
+                     ->schema([
+                        Forms\Components\Textarea::make('evolucao')
+                            ->columnSpanFull()
+                            ->label(''),
+                     ]),
 
                 Fieldset::make('Diagnósticos e Avaliações')
                     ->schema([

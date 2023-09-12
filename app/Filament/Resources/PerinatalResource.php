@@ -3,18 +3,22 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\PerinatalResource\Pages;
+use App\Models\DiagnosticoIntervencao;
 use App\Models\Estado;
 use App\Models\Exame;
 use App\Models\Paciente;
 use App\Models\Perinatal;
+use App\Models\PlanejamentoImplementacao;
 use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
@@ -52,90 +56,89 @@ class PerinatalResource extends Resource
                             ->schema([
 
 
-                        Forms\Components\Select::make('paciente_id')
-                            ->columnSpan('2')
-                            ->searchable()
-                            ->live()
-                            ->afterStateUpdated(function ($state, Set $set){
-                                $paciente = Paciente::find($state);
-                                $date =  Carbon::parse($paciente->data_nascimento);
-                                $idade = $date->diffInYears(Carbon::now());
-                                $set('idade',$idade);
-
-                            })
-                            ->relationship(name: 'paciente', titleAttribute: 'nome')
-                            ->createOptionForm([
-                                Grid::make()
-                                    ->schema([
-                                        Forms\Components\TextInput::make('nome')
-                                            ->required()
-                                            ->maxLength(255),
-                                       Forms\Components\DatePicker::make('data_nascimento')
-                                            ->label('Data de Nascimento')
-                                            ->required(),
-                                    Forms\Components\Textarea::make('endereco')
-                                            ->label('Endereço')
-                                            ->required()
-                                            ->columnSpanFull(),
-                                        Forms\Components\Select::make('estado_id')
-                                            ->searchable()
-                                            ->label('Estado')
-                                            ->required()
-                                            ->options(Estado::all()->pluck('nome', 'id')->toArray())
-                                            ->reactive(),
-                                        Forms\Components\Select::make('cidade_id')
-                                            ->searchable()
-                                            ->label('Cidade')
-                                            ->required()
-                                            ->options(function (callable $get) {
-                                                $estado = Estado::find($get('estado_id'));
-                                                if (!$estado) {
-                                                    return Estado::all()->pluck('nome', 'id');
-                                                }
-                                                return $estado->cidade->pluck('nome', 'id');
-                                            })
-                                            ->reactive(),
-                                        Forms\Components\TextInput::make('profissão')
-                                            ->required()
-                                            ->maxLength(255),
-                                        Forms\Components\TextInput::make('telefone')
-                                            ->tel()
-                                            ->required()
-                                            ->mask('(99)99999-9999')
-                                            ->maxLength(255),
-                                        Forms\Components\Radio::make('cor')
-                                            ->required()
-                                            ->inline()
-                                            ->options([
-                                                '1' => 'Branca',
-                                                '2' => 'Preta',
-                                                '3' => 'Parda',
-                                                '4' => 'Amarela',
-                                                '5' => 'Indígena',
-                                                '6' => 'Não Declarar',
-                                            ])->columnSpanFull(),
-                                        Forms\Components\Textarea::make('obs')
-                                            ->label('Observações')
-                                            ->columnSpanFull(),
+                                Forms\Components\Select::make('paciente_id')
+                                    ->columnSpan('2')
+                                    ->searchable()
+                                    ->live()
+                                    ->afterStateUpdated(function ($state, Set $set) {
+                                        $paciente = Paciente::find($state);
+                                        $date =  Carbon::parse($paciente->data_nascimento);
+                                        $idade = $date->diffInYears(Carbon::now());
+                                        $set('idade', $idade);
+                                    })
+                                    ->relationship(name: 'paciente', titleAttribute: 'nome')
+                                    ->createOptionForm([
+                                        Grid::make()
+                                            ->schema([
+                                                Forms\Components\TextInput::make('nome')
+                                                    ->required()
+                                                    ->maxLength(255),
+                                                Forms\Components\DatePicker::make('data_nascimento')
+                                                    ->label('Data de Nascimento')
+                                                    ->required(),
+                                                Forms\Components\Textarea::make('endereco')
+                                                    ->label('Endereço')
+                                                    ->required()
+                                                    ->columnSpanFull(),
+                                                Forms\Components\Select::make('estado_id')
+                                                    ->searchable()
+                                                    ->label('Estado')
+                                                    ->required()
+                                                    ->options(Estado::all()->pluck('nome', 'id')->toArray())
+                                                    ->reactive(),
+                                                Forms\Components\Select::make('cidade_id')
+                                                    ->searchable()
+                                                    ->label('Cidade')
+                                                    ->required()
+                                                    ->options(function (callable $get) {
+                                                        $estado = Estado::find($get('estado_id'));
+                                                        if (!$estado) {
+                                                            return Estado::all()->pluck('nome', 'id');
+                                                        }
+                                                        return $estado->cidade->pluck('nome', 'id');
+                                                    })
+                                                    ->reactive(),
+                                                Forms\Components\TextInput::make('profissão')
+                                                    ->required()
+                                                    ->maxLength(255),
+                                                Forms\Components\TextInput::make('telefone')
+                                                    ->tel()
+                                                    ->required()
+                                                    ->mask('(99)99999-9999')
+                                                    ->maxLength(255),
+                                                Forms\Components\Radio::make('cor')
+                                                    ->required()
+                                                    ->inline()
+                                                    ->options([
+                                                        '1' => 'Branca',
+                                                        '2' => 'Preta',
+                                                        '3' => 'Parda',
+                                                        '4' => 'Amarela',
+                                                        '5' => 'Indígena',
+                                                        '6' => 'Não Declarar',
+                                                    ])->columnSpanFull(),
+                                                Forms\Components\Textarea::make('obs')
+                                                    ->label('Observações')
+                                                    ->columnSpanFull(),
+                                            ]),
                                     ]),
-                            ]),
-                        Forms\Components\TextInput::make('idade')
-                            ->disabled(),
-                        Forms\Components\DatePicker::make('data')
-                             ->default(Carbon::now())
-                            ->label('Data do Cadastro'),
-                        Forms\Components\TextInput::make('peso')
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('altura')
-                                ->placeholder('0,00')
-                                //->mask('9,99')
-                                ->numeric(),
-                        Forms\Components\DatePicker::make('dum')
-                             ->label('DUM'),
-                        Forms\Components\DatePicker::make('dpp')
-                             ->label('DPP'),
-                        Forms\Components\DatePicker::make('dpp_eco')
-                            ->label('DPP eco'),
+                                Forms\Components\TextInput::make('idade')
+                                    ->disabled(),
+                                Forms\Components\DatePicker::make('data')
+                                    ->default(Carbon::now())
+                                    ->label('Data do Cadastro'),
+                                Forms\Components\TextInput::make('peso')
+                                    ->maxLength(255),
+                                Forms\Components\TextInput::make('altura')
+                                    ->placeholder('0,00')
+                                    //->mask('9,99')
+                                    ->numeric(),
+                                Forms\Components\DatePicker::make('dum')
+                                    ->label('DUM'),
+                                Forms\Components\DatePicker::make('dpp')
+                                    ->label('DPP'),
+                                Forms\Components\DatePicker::make('dpp_eco')
+                                    ->label('DPP eco'),
                             ])
                     ]),
                 Fieldset::make('Gestações')
@@ -158,7 +161,7 @@ class PerinatalResource extends Resource
                                     ->numeric()
                                     ->maxLength(255),
                                 Forms\Components\Radio::make('gravidez_planejada')
-                                     ->options([
+                                    ->options([
                                         '0' => 'Não',
                                         '1' => 'Sim',
 
@@ -190,10 +193,10 @@ class PerinatalResource extends Resource
                                         '0' => 'Não',
                                         '1' => 'Sim',
                                     ]),
-                                    Forms\Components\Toggle::make('abortos_3')
+                                Forms\Components\Toggle::make('abortos_3')
                                     ->inline(false)
                                     ->label('3 ou + abortos'),
-                                    Forms\Components\Toggle::make('bebe_2500')
+                                Forms\Components\Toggle::make('bebe_2500')
                                     ->inline(false)
                                     ->label('Bebê < 2.500g'),
 
@@ -226,20 +229,20 @@ class PerinatalResource extends Resource
                                                         '0' => 'Não',
                                                         '1' => 'Sim',
                                                     ]),
-                                                    //->live(),
+                                                //->live(),
                                                 Forms\Components\DatePicker::make('vacina_dt_data_1')
-                                                  //  ->hidden(fn (Get $get): bool => $get('vacina_dt') === null || $get('vacina_dt') === '0')
+                                                    //  ->hidden(fn (Get $get): bool => $get('vacina_dt') === null || $get('vacina_dt') === '0')
                                                     ->label('1º Dose'),
                                                 Forms\Components\DatePicker::make('vacina_dt_data_2')
-                                                 //   ->hidden(fn (Get $get): bool => $get('vacina_dt') === null || $get('vacina_dt') === '0')
+                                                    //   ->hidden(fn (Get $get): bool => $get('vacina_dt') === null || $get('vacina_dt') === '0')
                                                     ->label('2º Dose'),
                                                 Forms\Components\DatePicker::make('vacina_dt_data_3')
-                                                  //  ->hidden(fn (Get $get): bool => $get('vacina_dt') === null || $get('vacina_dt') === '0')
+                                                    //  ->hidden(fn (Get $get): bool => $get('vacina_dt') === null || $get('vacina_dt') === '0')
                                                     ->label('3º Dose'),
                                                 Forms\Components\DatePicker::make('vacina_dt_reforco')
-                                                 //   ->hidden(fn (Get $get): bool => $get('vacina_dt') === null || $get('vacina_dt') === '0')
+                                                    //   ->hidden(fn (Get $get): bool => $get('vacina_dt') === null || $get('vacina_dt') === '0')
                                                     ->label('Reforco'),
-                                                 Forms\Components\DatePicker::make('vacina_dtpa')
+                                                Forms\Components\DatePicker::make('vacina_dtpa')
                                                     ->label('dTpa'),
                                             ]),
                                         Section::make('Vacina HPV')
@@ -347,6 +350,7 @@ class PerinatalResource extends Resource
                                                 Grid::make(5)
                                                     ->schema([
                                                         TextInput::make('consultas')
+                                                            ->label('Consulta')
                                                             ->datalist([
                                                                 '1º Consulta',
                                                                 '2º Consulta',
@@ -360,10 +364,10 @@ class PerinatalResource extends Resource
                                                                 '10º Consulta',
 
                                                             ]),
-                                                       DatePicker::make('data')
+                                                        DatePicker::make('data')
                                                             ->label('Data'),
                                                         TextInput::make('queixas')
-                                                           // ->columnSpan('2')
+                                                            // ->columnSpan('2')
                                                             ->label('Queixas'),
                                                         TextInput::make('ig_dum_usg')
                                                             ->label('IG DUM/USG'),
@@ -371,10 +375,10 @@ class PerinatalResource extends Resource
                                                             ->label('Peso (kg)')
                                                             ->numeric()
                                                             ->live(onBlur: true)
-                                                            ->afterStateUpdated(function(Get $get, Set $set, $state) {
-                                                                   $imc = (float)($state) / ((float)($get('../../altura') * $get('../../altura')));
-                                                                    $imc = round($imc);
-                                                                    $set('imc', $imc);
+                                                            ->afterStateUpdated(function (Get $get, Set $set, $state) {
+                                                                $imc = (float)($state) / ((float)($get('../../altura') * $get('../../altura')));
+                                                                $imc = round($imc);
+                                                                $set('imc', $imc);
                                                             }),
                                                         TextInput::make('imc')
                                                             ->hint('Calculado quando alterar o peso')
@@ -390,13 +394,66 @@ class PerinatalResource extends Resource
                                                             ->label('BCF/Mov.Fetal'),
                                                         TextInput::make('edema')
                                                             ->label('Edema'),
-                                                        TextInput::make('evolucao')
+                                                        Radio::make('sufato_ferroso')
+                                                            ->label('Sufato Ferroso')
+                                                            ->options([
+                                                                '1' => 'Sim',
+                                                                '2' => 'Não',
+                                                            ]),
+                                                        Radio::make('acido_folico')
+                                                            ->label('Ácido Fólico')
+                                                            ->options([
+                                                                '1' => 'Sim',
+                                                                '2' => 'Não',
+                                                            ]),
+                                                        Textarea::make('evolucao')
                                                             ->label('Evolução')
                                                             ->columnSpanFull(),
-                                                    
-                                                        ]),
-                                               
+
+                                                    ]),
+
                                             ])->columnSpanFull(),
+
+                                        Fieldset::make('Diagnósticos e Planejamentos')
+                                            ->columns('3')
+                                            ->schema([
+                                                Repeater::make('diagnosticos')
+                                                    ->label('')
+                                                    ->schema([
+                                                        Grid::make(3)
+                                                            ->schema([
+                                                                TextInput::make('consultas')
+                                                                    ->label('Consulta')
+                                                                    ->datalist([
+                                                                        '1º Consulta',
+                                                                        '2º Consulta',
+                                                                        '3º Consulta',
+                                                                        '4º Consulta',
+                                                                        '5º Consulta',
+                                                                        '6º Consulta',
+                                                                        '7º Consulta',
+                                                                        '8º Consulta',
+                                                                        '9º Consulta',
+                                                                        '10º Consulta',
+
+                                                                    ]),
+                                                                Forms\Components\Select::make('diagnostico_intervencao_id')
+                                                                    ->multiple()
+                                                                    ->getSearchResultsUsing(fn (string $search): array => DiagnosticoIntervencao::where('descricao', 'like', "%{$search}%")->limit(50)->pluck('descricao', 'id')->toArray())
+                                                                    ->getOptionLabelsUsing(fn (array $values): array => DiagnosticoIntervencao::whereIn('id', $values)->pluck('descricao', 'id')->toArray())
+                                                                    ->label('Diagnósticos de Enfermagem'),
+                                                                Forms\Components\Select::make('planejamento_implementacao_id')
+                                                                    ->multiple()
+                                                                    ->getSearchResultsUsing(fn (string $search): array => PlanejamentoImplementacao::where('descricao', 'like', "%{$search}%")->limit(50)->pluck('descricao', 'id')->toArray())
+                                                                    ->getOptionLabelsUsing(fn (array $values): array => PlanejamentoImplementacao::whereIn('id', $values)->pluck('descricao', 'id')->toArray())
+                                                                    ->label('Planejamentos/Implementações'),
+                                                                Forms\Components\Textarea::make('planejamento_desc')
+                                                                    ->label('Descrição do planejamento')
+                                                                    ->columnSpanFull(),
+                                                            ]),
+                                                    ])->columnSpanFull(),
+                                                        ]),
+                                            
                                         Forms\Components\Toggle::make('status')
                                             ->label('Finalizar Atendimento'),
                                     ])

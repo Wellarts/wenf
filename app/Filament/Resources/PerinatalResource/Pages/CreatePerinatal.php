@@ -11,4 +11,9 @@ class CreatePerinatal extends CreateRecord
     protected static string $resource = PerinatalResource::class;
 
     protected static ?string $title = 'Pré-Natal';
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

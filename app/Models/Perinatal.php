@@ -53,6 +53,7 @@ class Perinatal extends Model
         'exames',
         'ultrassons',
         'acompanhamentos',
+        'diagnosticos',
         'status',
     ];
 
@@ -60,6 +61,7 @@ class Perinatal extends Model
         'exames' => 'array',
         'ultrassons' => 'array',
         'acompanhamentos' => 'array',
+        'diagnosticos' => 'array',
 
     ];
 

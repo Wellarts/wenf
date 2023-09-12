@@ -58,7 +58,7 @@ class FornecedorResource extends Resource
                 Forms\Components\TextInput::make('telefone')
                     ->minLength(11)
                     ->maxLength(11)
-                    ->required()
+                    ->required(false)
                     ->mask('(99)99999-9999')
                     ->tel()
                     ->maxLength(255),
