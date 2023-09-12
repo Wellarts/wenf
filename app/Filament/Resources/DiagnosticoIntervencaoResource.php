@@ -28,7 +28,7 @@ class DiagnosticoIntervencaoResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('descricao')
-                    ->label('Código -Descrição')
+                    ->label('Código - Descrição')
                     ->required()
                     ->maxLength(255),
              /*   Forms\Components\Radio::make('tipo')
