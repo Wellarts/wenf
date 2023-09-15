@@ -25,6 +25,8 @@ use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -494,7 +496,27 @@ class PerinatalResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                Filter::make('finalizada')
+                    ->label('Finalizadas')
+                    ->query(fn (Builder $query): Builder => $query->where('status', true)),
+                Filter::make('nao_finalizada')
+                    ->label('Não Finalizadas')
+                    ->query(fn (Builder $query): Builder => $query->where('status', false)),
+                SelectFilter::make('paciente')->relationship('paciente', 'nome'),
+                 Tables\Filters\Filter::make('data')
+                    ->form([
+                        Forms\Components\DatePicker::make('data_consulta_de')
+                            ->label('Consulta de:'),
+                        Forms\Components\DatePicker::make('data_consulta_ate')
+                            ->label('Consulta até:'),
+                    ])
+                    ->query(function ($query, array $data) {
+                        return $query
+                            ->when($data['data_consulta_de'],
+                                fn($query) => $query->whereDate('data', '>=', $data['data_consulta_de']))
+                            ->when($data['data_consulta_ate'],
+                                fn($query) => $query->whereDate('data', '<=', $data['data_consulta_ate']));
+                    })
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

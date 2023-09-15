@@ -19,9 +19,9 @@
                 </td>
                 
                 <td style="width: 90%">
-                    <p style="text-align: center; font-size: 12pt; color: darkgray"><b>Clínica Mamma Baby</b> <br>
-                        Avenida 19 de Maio, 426 - Centro - Lajedo-PE<br>
-                        (87)9.9904-9226 @mamm_ababy
+                    <p style="text-align: center; font-size: 12pt; color: darkgray"><b>Wenf</b> <br>
+                        Rua Manoel Joaquim Vilela, 120 - Centro - Lajedo-PE<br>
+                        (87)99930-2121
                     </p>
                 </td>
             </tr>

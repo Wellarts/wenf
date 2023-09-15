@@ -20,6 +20,8 @@ use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use GuzzleHttp\Psr7\UploadedFile;
 use Illuminate\Database\Eloquent\Builder;
@@ -34,6 +36,11 @@ class AmamentacaoResource extends Resource
     protected static ?string $navigationGroup = 'Atendimentos';
 
     protected static ?string $navigationLabel = 'Consultoria em Amamentação';
+
+    //REMOVER O RECURSO DO CLIENTE
+    
+
+    protected static bool $shouldRegisterNavigation = false;
 
     public static function form(Form $form): Form
     {
@@ -554,7 +561,27 @@ class AmamentacaoResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                Filter::make('finalizada')
+                    ->label('Finalizadas')
+                    ->query(fn (Builder $query): Builder => $query->where('status', true)),
+                Filter::make('nao_finalizada')
+                    ->label('Não Finalizadas')
+                    ->query(fn (Builder $query): Builder => $query->where('status', false)),
+                SelectFilter::make('paciente')->relationship('paciente', 'nome'),
+                 Tables\Filters\Filter::make('data_consulta_gestacao')
+                    ->form([
+                        Forms\Components\DatePicker::make('data_consulta_gestacao_de')
+                            ->label('Consulta de:'),
+                        Forms\Components\DatePicker::make('data_consulta_gestacao_ate')
+                            ->label('Consulta até:'),
+                    ])
+                    ->query(function ($query, array $data) {
+                        return $query
+                            ->when($data['data_consulta_gestacao_de'],
+                                fn($query) => $query->whereDate('data_consulta_gestacao', '>=', $data['data_consulta_gestacao_de']))
+                            ->when($data['data_consulta_gestacao_ate'],
+                                fn($query) => $query->whereDate('data_consulta_gestacao', '<=', $data['data_consulta_gestacao_ate']));
+                    })
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
