@@ -22,6 +22,7 @@ class AgendarAtendimentoResource extends Resource
     protected static ?string $navigationGroup = 'Atendimentos';
 
     protected static ?string $navigationLabel = 'Agendamentos';
+    
 
     public static function form(Form $form): Form
     {
