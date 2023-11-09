@@ -40,7 +40,7 @@ class AmamentacaoResource extends Resource
     //REMOVER O RECURSO DO CLIENTE
     
 
-    protected static bool $shouldRegisterNavigation = false;
+    protected static bool $shouldRegisterNavigation = true;
 
     public static function form(Form $form): Form
     {
