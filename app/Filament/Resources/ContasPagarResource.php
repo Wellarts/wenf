@@ -42,9 +42,12 @@ class ContasPagarResource extends Resource
                     ->options(Fornecedor::all()->pluck('nome', 'id')->toArray())
                     ->required(),
                 Forms\Components\TextInput::make('valor_total')
+                    ->label('Valor Total')
+                    ->numeric()
                     ->required(),
                 Forms\Components\TextInput::make('parcelas')
-                    ->reactive()
+                    ->numeric()
+                    ->live(debounce:500)
                     ->afterStateUpdated(function (Get $get, Set $set) {
                         if($get('parcelas') != 1)
                            {
@@ -78,6 +81,7 @@ class ContasPagarResource extends Resource
                     ->label('Parcela Nº')
                     ->default('1'),
                 Forms\Components\DatePicker::make('data_vencimento')
+                    ->label('Data do Vencimento')
                     ->displayFormat('d/m/Y')
                     ->default(now())
                     ->required(),
@@ -107,8 +111,12 @@ class ContasPagarResource extends Resource
                     ),
 
                 Forms\Components\TextInput::make('valor_parcela')
+                      ->label('Valor Parcela')
+                      ->numeric()
                       ->required(),
-                Forms\Components\TextInput::make('valor_pago'),
+                Forms\Components\TextInput::make('valor_pago')
+                    ->label('Valor Pago')
+                    ->numeric(),
                 Forms\Components\Textarea::make('obs')
                     ->label('Observações'),
             ]);

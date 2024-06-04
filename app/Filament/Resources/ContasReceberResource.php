@@ -43,10 +43,13 @@ class ContasReceberResource extends Resource
                     ->options(Paciente::all()->pluck('nome', 'id')->toArray())
                     ->required(),
                 Forms\Components\TextInput::make('valor_total')
+                    ->numeric()
+                    ->label('Valor Total')
                     ->required(),
                 Forms\Components\TextInput::make('parcelas')
+                    ->numeric()
                     ->hiddenOn('edit')
-                    ->reactive()
+                    ->live(debounce:500)
                     ->afterStateUpdated(function (Get $get, callable $set) {
                         if($get('parcelas') != 1)
                            {
@@ -95,7 +98,7 @@ class ContasReceberResource extends Resource
                     ->default('true')
                     ->label('Recebido')
                     ->required()
-                    ->reactive()
+                    ->live()
                     ->afterStateUpdated(function (Get $get, callable $set) {
                                 if($get('status') == 1)
                                     {
@@ -113,8 +116,12 @@ class ContasReceberResource extends Resource
                     ),
 
                 Forms\Components\TextInput::make('valor_parcela')
+                      ->label('Valor Parcela ')
+                      ->numeric()
                       ->required(),
-                Forms\Components\TextInput::make('valor_recebido'),
+                Forms\Components\TextInput::make('valor_recebido')
+                        ->label('Valor Recebido')
+                        ->numeric(),
                 Forms\Components\Textarea::make('obs')
                     ->label('Observações'),
             ]);
